@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Buy Items | NIT KKR Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="container">
+
+<!-- Navbar -->
+<nav class="navbar glass fade-in">
+  <div class="nav-left">
+    <img src="nitlogo.png" alt="Logo" class="nav-logo" />
+    <span class="nav-title">NIT KKR Marketplace</span>
+  </div>
+
+  <div class="nav-right">
+
+    <a href="dashboard.html" class="nav-btn">
+      Dashboard
+    </a>
+
+    <a href="profile.html">
+      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-icon" />
+    </a>
+
+  </div>
+</nav>
+
+
+<!-- Page Heading -->
+<section class="welcome fade-in delay-1">
+  <h1>Buy Items</h1>
+  <p>Browse items listed by students and staff inside the campus.</p>
+</section>
+
+
+<!-- Guest Notice -->
+<section class="guest-banner glass fade-in delay-2" id="guestNotice">
+  <p>
+    You are browsing as a <strong>Guest</strong>.  
+    Login to view prices and contact sellers.
+  </p>
+</section>
+
+
+<!-- Search / Filter UI (visual only for now) -->
+<section class="filter-bar glass fade-in delay-2">
+  <input type="text" placeholder="Search items (e.g. chair, kettle, books)" />
+
+  <select>
+    <option selected disabled>Filter by Category</option>
+    <option>Furniture</option>
+    <option>Electronics</option>
+    <option>Books</option>
+    <option>Hostel Essentials</option>
+    <option>Others</option>
+  </select>
+</section>
+
+
+<!-- Items -->
+<section class="items fade-in delay-3">
+
+  <div class="empty-state glass">
+    <h3>No items listed yet</h3>
+    <p>
+      Items posted by students and staff will appear here.<br>
+      Please check back later or login to post an item.
+    </p>
+  </div>
+
+</section>
+
+
+<!-- Footer -->
+<footer class="footer fade-in delay-3">
+  <p>
+    © 2026 NIT Kurukshetra • 
+    <a href="contactdev.html" style="color:#93c5fd;">Contact Developers</a>
+  </p>
+</footer>
+
+</div>
+
+
+<script src="js/dashboard.js"></script>
+
+<script>
+
+const API_BASE = "http://localhost:3000";
+
+async function loadItems() {
+
+  const token = localStorage.getItem("token");
+  const isLoggedIn = !!token;
+
+  const res = await fetch(`${API_BASE}/api/items`);
+  const items = await res.json();
+
+  const empty = document.querySelector(".empty-state");
+  const section = document.querySelector(".items");
+
+  if (items.length === 0) return;
+
+  empty.style.display = "none";
+
+  const grid = document.createElement("div");
+  grid.className = "item-grid";
+
+  items.forEach(item => {
+
+    const card = document.createElement("div");
+    card.className = "item-card glass";
+
+    let priceHTML = "";
+    let contactHTML = "";
+
+    if (isLoggedIn) {
+
+      priceHTML = `<p class="item-price">₹${item.price}</p>`;
+
+      contactHTML = `
+<button onclick="showContact('${item.seller.name}','${item.seller.email}','${item.seller.mobile}','${item.title}')">
+Buy Item
+</button>
+`;
+
+      document.getElementById("guestNotice").style.display = "none";
+
+    } else {
+
+      priceHTML = `<p class="item-price">Login to view price</p>`;
+      contactHTML = "";
+
+    }
+
+    card.innerHTML = `
+      <h3>${item.title}</h3>
+      <p class="item-meta">Category: ${item.category}</p>
+      ${priceHTML}
+      <p>${item.description}</p>
+      ${contactHTML}
+    `;
+
+    grid.appendChild(card);
+
+  });
+
+  section.appendChild(grid);
+
+}
+
+loadItems();
+
+function showContact(name, email, mobile, itemTitle) {
+
+  const message =
+  `Hello ${name}, I am interested in your item "${itemTitle}" listed on NIT KKR Marketplace. Is it still available?`;
+
+  const encodedMessage = encodeURIComponent(message);
+
+  const whatsappLink = `https://wa.me/91${mobile}?text=${encodedMessage}`;
+
+  alert(
+`Seller: ${name}
+
+Email: ${email}
+
+Mobile: ${mobile}
+
+WhatsApp chat will open after closing this message.`
+  );
+
+  window.open(whatsappLink, "_blank");
+
+}
+
+</script>
+
+</body>
+</html>

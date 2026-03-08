@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Profile | NIT KKR Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="container">
+
+<!-- Navbar -->
+<nav class="navbar glass">
+  <div class="nav-left">
+    <span class="nav-title">My Profile</span>
+  </div>
+
+  <div class="nav-right">
+    <a href="dashboard.html" class="nav-btn">Dashboard</a>
+  </div>
+</nav>
+
+
+<!-- Profile Card -->
+<section class="sell-form glass">
+
+<div class="profile-avatar">
+<img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User" />
+</div>
+
+<h1>Profile Details</h1>
+
+
+<div class="form-group">
+<label>Name</label>
+<input id="p-name" disabled class="locked-field" />
+</div>
+
+<div class="form-group">
+<label>Email</label>
+<input id="p-email" disabled class="locked-field" />
+</div>
+
+<div class="form-group">
+<label>Roll Number</label>
+<input id="p-roll" disabled class="locked-field" />
+</div>
+
+<div class="form-group">
+<label>Hostel</label>
+<input id="p-hostel" />
+</div>
+
+<div class="form-group">
+<label>Mobile</label>
+<input id="p-mobile" />
+</div>
+
+<div class="form-actions">
+<button onclick="saveProfile()">Save Changes</button>
+</div>
+
+<div class="form-actions">
+<button class="logout-btn" onclick="logoutUser()">
+Logout
+</button>
+</div>
+
+</section>
+
+</div>
+
+<script src="js/profile.js"></script>
+
+</body>
+</html>

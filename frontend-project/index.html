@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NIT KKR Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<script src="js/main.js"></script>
+<body>
+
+  <!-- Background -->
+  <div class="bg"></div>
+
+  <!-- Main Container -->
+  <div class="container">
+
+    <!-- Header -->
+    <header class="header fade-in">
+      <img src="nitlogo.png" alt="NIT Logo" class="logo" />
+      <h1>NIT KKR Marketplace</h1>
+      <p class="tagline">
+        A trusted hostel marketplace for students & staff
+      </p>
+    </header>
+
+    <!-- Rules Section -->
+    <section class="rules glass fade-in delay-1">
+      <h2>Marketplace Guidelines</h2>
+      <ul>
+        <li>Only NIT Kurukshetra students & staff can sell items</li>
+        <li>No online transactions on this platform</li>
+        <li>Buyers contact sellers directly</li>
+        <li>Items must be marked as sold after completion</li>
+        <li>Misuse may lead to account restriction and further actions can be taken</li>
+      </ul>
+    </section>
+
+    <!-- Role Selection -->
+    <section class="roles fade-in delay-2">
+      <h2>Continue As</h2>
+
+      <div class="role-cards">
+
+        <div class="role-card glass">
+          <h3>Guest</h3>
+          <p>
+            Browse available items without seeing prices or seller details.
+          </p>
+          <a href="guest.html" class="nav-btn">Continue as Guest</a>
+        </div>
+
+        <div class="role-card glass">
+          <h3>Student</h3>
+          <p>
+            Login with your NIT KKR ID to buy or sell items.
+          </p>
+          <button onclick="continueAsUser('student')">Continue as Student</button>
+        </div>
+
+        <div class="role-card glass">
+          <h3>Staff</h3>
+          <p>
+            Verified staff members can list and browse items.
+          </p>
+          <button onclick="continueAsUser('staff')">Continue as Staff</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+<footer class="footer fade-in delay-3">
+  <p>
+    © 2026 NIT Kurukshetra • Student Marketplace Project • 
+    <a href="contactdev.html" style="color:#93c5fd;">Contact Developers</a>
+  </p>
+</footer>
+
+  </div>
+<script src="js/main.js"></script>
+</body>
+</html>

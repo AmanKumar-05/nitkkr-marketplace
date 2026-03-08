@@ -1,0 +1,791 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* Background */
+body {
+  min-height: 100vh;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  z-index: -2;
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.logo {
+  width: 90px;
+  margin-bottom: 12px;
+}
+
+.header h1 {
+  font-size: 2.6rem;
+  margin-bottom: 8px;
+}
+
+.tagline {
+  opacity: 0.85;
+  font-size: 1.1rem;
+}
+
+/* Rules */
+.rules {
+  padding: 24px;
+  margin-bottom: 40px;
+}
+
+.rules h2 {
+  margin-bottom: 16px;
+}
+
+.rules ul {
+  list-style: none;
+}
+
+.rules li {
+  margin-bottom: 10px;
+  padding-left: 20px;
+  position: relative;
+  opacity: 0.9;
+}
+
+.rules li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  color: #4ade80;
+}
+
+/* Roles */
+.roles h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.role-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+}
+
+.role-card {
+  padding: 24px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.role-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.role-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+}
+
+.role-card p {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin-bottom: 20px;
+}
+
+/* Buttons */
+button {
+  padding: 10px 22px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #38bdf8, #3b82f6);
+  color: white;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  margin-top: 50px;
+  opacity: 0.6;
+  font-size: 0.85rem;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.8s ease forwards;
+  opacity: 0;
+}
+
+.delay-1 { animation-delay: 0.2s; }
+.delay-2 { animation-delay: 0.4s; }
+.delay-3 { animation-delay: 0.6s; }
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+}
+
+/* Contact Developers Page */
+.dev-info {
+  padding: 24px;
+  margin-bottom: 40px;
+}
+
+.dev-info ul {
+  list-style: none;
+}
+
+.dev-info li {
+  margin-bottom: 10px;
+  opacity: 0.9;
+}
+
+.center-text {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.back-btn {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.back-btn a {
+  text-decoration: none;
+  color: #93c5fd;
+  font-size: 0.95rem;
+}
+
+.back-btn a:hover {
+  text-decoration: underline;
+}
+
+/* Project Overview – Center Highlight */
+.dev-info {
+  max-width: 800px;
+  margin: 0 auto 50px auto; /* centers + spacing */
+  padding: 28px 32px;
+  text-align: center;
+}
+
+/* Project Overview list alignment */
+.dev-info ul {
+  list-style: none;
+  margin-top: 16px;
+}
+
+.dev-info li {
+  margin-bottom: 12px;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
+
+/* Make labels stand out */
+.dev-info strong {
+  color: #e0f2fe;
+}
+
+/* Slight glow on hover (subtle & cool) */
+.dev-info:hover {
+  box-shadow: 0 0 40px rgba(56, 189, 248, 0.15);
+  transition: box-shadow 0.3s ease;
+}
+
+/* Mobile refinement */
+@media (max-width: 600px) {
+  .dev-info {
+    padding: 22px;
+    margin-bottom: 40px;
+  }
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  margin-bottom: 40px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-logo {
+  width: 40px;
+}
+
+.nav-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.nav-btn {
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+/* Welcome */
+.welcome {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.welcome h1 {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+}
+
+.welcome p {
+  opacity: 0.85;
+}
+
+/* Guest Banner */
+.guest-banner {
+  padding: 18px;
+  margin-bottom: 40px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+/* Actions */
+.actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 50px;
+}
+
+.action-card {
+  padding: 26px;
+  text-align: center;
+}
+
+.action-card h2 {
+  margin-bottom: 10px;
+}
+
+.action-card p {
+  opacity: 0.85;
+  margin-bottom: 18px;
+}
+
+.nav-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+/* ===== Interactive Glow Effects for Action Cards ===== */
+
+.action-card {
+  position: relative;
+  overflow: hidden;
+  transition: 
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border 0.35s ease;
+}
+
+/* Glow layer */
+.action-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: radial-gradient(
+    circle at top,
+    rgba(56, 189, 248, 0.25),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+/* Hover effect */
+.action-card:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow:
+    0 0 25px rgba(56, 189, 248, 0.35),
+    0 25px 50px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(147, 197, 253, 0.6);
+}
+
+/* Activate glow */
+.action-card:hover::before {
+  opacity: 1;
+}
+
+/* Button glow when card hovered */
+.action-card:hover button {
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.7),
+    0 0 40px rgba(59, 130, 246, 0.4);
+  transform: scale(1.08);
+}
+
+/* Smooth button transition */
+.action-card button {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* ===== GLOBAL INTERACTIVE GLOW FOR ALL SECTIONS ===== */
+
+/* Base interactive behavior */
+.glass,
+.role-card,
+.action-card {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border 0.35s ease;
+}
+
+/* Glow overlay */
+.glass::before,
+.role-card::before,
+.action-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at top,
+    rgba(56, 189, 248, 0.28),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+/* Hover effect */
+.glass:hover,
+.role-card:hover,
+.action-card:hover {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow:
+    0 0 30px rgba(56, 189, 248, 0.35),
+    0 25px 50px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(147, 197, 253, 0.55);
+}
+
+/* Activate glow */
+.glass:hover::before,
+.role-card:hover::before,
+.action-card:hover::before {
+  opacity: 1;
+}
+
+/* Buttons sync with card hover */
+.glass:hover button,
+.role-card:hover button,
+.action-card:hover button {
+  transform: scale(1.08);
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.7),
+    0 0 40px rgba(59, 130, 246, 0.4);
+}
+
+/* Smooth button animation */
+button {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* ===== BUY PAGE UI ===== */
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 16px;
+  padding: 18px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.filter-bar input,
+.filter-bar select {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 0.9rem;
+}
+
+.filter-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.filter-bar select option {
+  color: black;
+}
+
+/* Items section */
+.items {
+  margin-bottom: 50px;
+}
+
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 22px;
+}
+
+/* Item card */
+.item-card {
+  padding: 22px;
+  text-align: left;
+}
+
+.item-card h3 {
+  margin-bottom: 8px;
+}
+
+.item-meta {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-bottom: 4px;
+}
+
+.item-price {
+  margin: 12px 0;
+  font-weight: 500;
+  color: #bae6fd;
+}
+
+/* Button spacing */
+.item-card button {
+  margin-top: 8px;
+  width: 100%;
+}
+/* Make anchor behave like a button */
+.nav-btn {
+  all: unset;                  /* removes default <a> styles */
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  background: linear-gradient(135deg, #38bdf8, #3b82f6);
+  color: white;
+  text-align: center;
+}
+
+/* Hover effect (same as button) */
+.nav-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5);
+}
+
+/* Empty State */
+.empty-state {
+  padding: 40px 20px;
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.empty-state h3 {
+  margin-bottom: 12px;
+  font-size: 1.3rem;
+}
+
+.empty-state p {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  line-height: 1.5;
+}
+
+/* ===== SELL PAGE ===== */
+
+.sell-form {
+  max-width: 600px;
+  margin: 0 auto 60px auto;
+  padding: 30px 28px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  font-size: 0.9rem;
+}
+
+.form-group textarea {
+  resize: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-group select option {
+  color: black;
+}
+
+/* Form actions */
+.form-actions {
+  text-align: center;
+  margin-top: 25px;
+}
+
+.form-actions button {
+  padding: 12px 30px;
+  font-size: 0.95rem;
+}
+
+/* ===== LOGIN PAGE ===== */
+
+.login-card {
+  max-width: 420px;
+  margin: 80px auto 60px auto;
+  padding: 32px 28px;
+  text-align: center;
+}
+
+.login-card h1 {
+  margin-bottom: 8px;
+}
+
+.login-subtext {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  margin-bottom: 24px;
+}
+
+.login-note {
+  margin-top: 18px;
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+/* OTP MODAL */
+.otp-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.otp-box {
+  padding: 28px;
+  width: 300px;
+  text-align: center;
+}
+
+.otp-box input {
+  width: 100%;
+  margin: 12px 0;
+}
+#otp-timer {
+  margin: 8px 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+#resend-btn {
+  margin-top: 10px;
+  background: rgba(255,255,255,0.15);
+}
+.profile-icon img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+
+
+/* Profile Avatar */
+.profile-avatar {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.profile-avatar img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.1);
+  padding: 6px;
+}
+
+/* Locked fields style */
+.locked-field {
+  opacity: 0.6;
+  filter: blur(0.4px);
+  background: rgba(255,255,255,0.08);
+  cursor: not-allowed;
+}
+
+/* Profile Menu */
+.profile-menu {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.5);
+  cursor: pointer;
+}
+
+/* Dropdown */
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 48px;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  padding: 10px 0;
+  width: 140px;
+  display: none;
+  flex-direction: column;
+  z-index: 999;
+}
+
+.dropdown-menu a {
+  padding: 10px 16px;
+  text-decoration: none;
+  color: white;
+  display: block;
+  font-size: 0.9rem;
+}
+
+.dropdown-menu a:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.logout-btn {
+  margin: 20px auto 0 auto;   /* center it */
+  width: 40%;                 /* same feel as header/card */
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+  display: block;
+  text-align: center;
+}
+
+.logout-btn:hover {
+  background: rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+}
+
+/* OTP INPUT IMPROVEMENT */
+
+.otp-input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  letter-spacing: 6px;
+  text-align: center;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  color: white;
+  margin-top: 12px;
+  transition: 0.2s;
+}
+
+.otp-input:focus {
+  box-shadow: 0 0 10px rgba(100,200,255,0.6);
+}
+
+.otp-input::placeholder {
+  letter-spacing: normal;
+  color: rgba(255,255,255,0.6);
+}

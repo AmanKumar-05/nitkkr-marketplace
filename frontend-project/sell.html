@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sell Item | NIT KKR Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="container">
+
+<!-- Navbar -->
+<nav class="navbar glass fade-in">
+  <div class="nav-left">
+    <img src="nitlogo.png" alt="Logo" class="nav-logo" />
+    <span class="nav-title">NIT KKR Marketplace</span>
+  </div>
+
+  <div class="nav-right">
+
+    <a href="dashboard.html" class="nav-btn">
+      Dashboard
+    </a>
+
+    <a href="profile.html">
+      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-icon" />
+    </a>
+
+  </div>
+</nav>
+
+
+<!-- Heading -->
+<section class="welcome fade-in delay-1">
+  <h1>Sell an Item</h1>
+  <p>List an item you want to sell within the campus marketplace.</p>
+</section>
+
+
+<!-- Sell Form -->
+<section class="sell-form glass fade-in delay-2">
+
+<form>
+
+<div class="form-group">
+<label>Item Name</label>
+<input id="title" type="text" placeholder="e.g. Study Table, Electric Kettle" />
+</div>
+
+<div class="form-group">
+<label>Category</label>
+<select id="category">
+<option selected disabled>Select category</option>
+<option>Electronics</option>
+<option>Books</option>
+<option>Hostel Essentials</option>
+<option>Others</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Condition</label>
+<select id="condition">
+<option selected disabled>Select condition</option>
+<option>New</option>
+<option>Like New</option>
+<option>Good</option>
+<option>Fair</option>
+<option>Used</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Price (₹)</label>
+<input id="price" type="number" placeholder="Enter expected price" />
+</div>
+
+<div class="form-group">
+<label>Description</label>
+<textarea id="description" rows="4" placeholder="Add a short description"></textarea>
+</div>
+
+<div class="form-group">
+<label>Upload Item Image</label>
+<input type="file" />
+</div>
+
+<div class="form-actions">
+<button type="button" onclick="createItem()">Post Item</button>
+</div>
+
+</form>
+
+</section>
+
+
+<!-- Footer -->
+<footer class="footer fade-in delay-3">
+<p>
+© 2026 NIT Kurukshetra •
+<a href="contactdev.html" style="color:#93c5fd;">Contact Developers</a>
+</p>
+</footer>
+
+</div>
+
+
+<script src="js/dashboard.js"></script>
+
+<script>
+
+const API_BASE = "http://localhost:3000";
+
+async function createItem() {
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    alert("Please login first");
+    window.location.href = "index.html";
+    return;
+  }
+
+  const title = document.getElementById("title").value;
+  const category = document.getElementById("category").value;
+  const price = document.getElementById("price").value;
+  const description = document.getElementById("description").value;
+
+  const res = await fetch(`${API_BASE}/api/items`, {
+
+    method: "POST",
+
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+
+    body: JSON.stringify({
+      title,
+      category,
+      price,
+      description
+    })
+
+  });
+
+  if (res.ok) {
+
+    alert("Item listed successfully!");
+
+    window.location.href = "mylistings.html";
+
+  } else {
+
+    alert("Error listing item");
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>

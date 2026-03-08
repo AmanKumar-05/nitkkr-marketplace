@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Listings | NIT KKR Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<!-- Background -->
+<div class="bg"></div>
+
+<div class="container">
+
+  <!-- Navbar -->
+  <nav class="navbar glass fade-in">
+  <div class="nav-left">
+    <img src="nitlogo.png" alt="Logo" class="nav-logo" />
+    <span class="nav-title">NIT KKR Marketplace</span>
+  </div>
+
+  <div class="nav-right">
+
+    <a href="dashboard.html" class="nav-btn">
+      Dashboard
+    </a>
+
+    <a href="profile.html">
+      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-icon" />
+    </a>
+
+  </div>
+</nav>
+
+  <!-- Page Heading -->
+  <section class="welcome fade-in delay-1">
+    <h1>My Listings</h1>
+    <p>Manage items you have listed for sale.</p>
+  </section>
+
+  <!-- Listings Section -->
+  <section class="items fade-in delay-2">
+
+    <!-- Empty State -->
+    <div class="empty-state glass">
+      <h3>No items listed yet</h3>
+      <p>
+        You haven’t listed any items for sale.<br />
+        Go to the Sell section to post your first item.
+      </p>
+
+      <a href="sell.html" class="nav-btn" style="margin-top:16px;">
+        Go to Sell Page
+      </a>
+    </div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer fade-in delay-3">
+    <p>
+      © 2026 NIT Kurukshetra •
+      <a href="contactdev.html" style="color:#93c5fd;">Contact Developers</a>
+    </p>
+  </footer>
+
+</div>
+
+<script src="js/dashboard.js"></script>
+
+<script>
+
+const API_BASE = "http://localhost:3000";
+
+/* Load user's listed items */
+async function loadMyItems() {
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    window.location.href = "index.html";
+    return;
+  }
+
+  const res = await fetch(`${API_BASE}/api/items/mine`, {
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  });
+
+  const items = await res.json();
+
+  const emptyState = document.querySelector(".empty-state");
+  const section = document.querySelector(".items");
+
+  if (items.length === 0) {
+    emptyState.style.display = "block";
+    return;
+  }
+
+  emptyState.style.display = "none";
+
+  const grid = document.createElement("div");
+  grid.className = "item-grid";
+
+  items.forEach(item => {
+
+    const card = document.createElement("div");
+    card.className = "item-card glass";
+
+    let statusHTML = "";
+
+    if (item.status === "sold") {
+
+      statusHTML = `
+        <p style="color: orange; font-weight: bold;">
+          Sold – will be removed in 24 hours
+        </p>
+      `;
+
+    } else {
+
+      statusHTML = `
+        <button onclick="markSold('${item._id}')">
+          Mark Sold
+        </button>
+      `;
+
+    }
+
+    card.innerHTML = `
+      <h3>${item.title}</h3>
+      <p>₹${item.price}</p>
+      ${statusHTML}
+    `;
+
+    grid.appendChild(card);
+
+  });
+
+  section.appendChild(grid);
+
+}
+
+/* Mark item sold */
+async function markSold(id) {
+
+  const token = localStorage.getItem("token");
+
+  await fetch(`${API_BASE}/api/items/${id}/sold`, {
+    method: "PATCH",
+    headers: {
+      "Authorization": "Bearer " + token
+    }
+  });
+
+  location.reload();
+
+}
+
+loadMyItems();
+
+</script>
+
+</body>
+</html>

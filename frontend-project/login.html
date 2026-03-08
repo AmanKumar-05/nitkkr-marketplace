@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | NIT KKR Marketplace</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<div class="bg"></div>
+
+<div class="container">
+
+<!-- Navbar -->
+<nav class="navbar glass fade-in">
+  <div class="nav-left">
+    <img src="nitlogo.png" class="nav-logo" />
+    <span class="nav-title">NIT KKR Marketplace</span>
+  </div>
+
+  <div class="nav-right">
+    <a href="index.html" class="nav-btn">Home</a>
+  </div>
+</nav>
+
+
+<!-- Login Card -->
+<section class="login-card glass fade-in delay-1">
+
+<h1>Login / Register</h1>
+
+<p class="login-subtext">
+Use your NIT Kurukshetra email for OTP verification
+</p>
+
+<form onsubmit="return false;">
+
+<div class="form-group">
+<label>Full Name</label>
+<input id="name" type="text" placeholder="Your full name" />
+</div>
+
+<div class="form-group">
+<label>College Email</label>
+<input id="email" type="email" placeholder="yourid@nitkkr.ac.in" />
+</div>
+
+<div class="form-group" id="roll-group">
+<label>Roll Number</label>
+<input id="roll" type="text" placeholder="Roll number" />
+</div>
+
+<div class="form-group" id="hostel-group">
+<label>Hostel Number</label>
+<input id="hostel" type="text" placeholder="Hostel number" />
+</div>
+
+<div class="form-group">
+<label>Mobile Number</label>
+<input id="mobile" type="tel" placeholder="10 digit mobile" />
+</div>
+
+<div class="form-actions">
+<button type="button" onclick="sendOTP()">Send OTP</button>
+</div>
+
+</form>
+
+</section>
+
+
+<!-- OTP POPUP -->
+<div id="otp-modal" class="otp-modal" style="display:none;">
+<div class="otp-box glass">
+
+<h3>Enter OTP</h3>
+
+<input 
+id="otp"
+type="text"
+maxlength="6"
+placeholder="Enter 6 digit OTP"
+class="otp-input"
+/>
+
+<p id="otp-timer">02:00</p>
+
+<button onclick="verifyOTP()">Verify & Login</button>
+
+<button id="resend-btn" onclick="resendOTP()" disabled>
+Resend OTP
+</button>
+
+</div>
+</div>
+
+
+<!-- Footer -->
+<footer class="footer fade-in delay-2">
+<p>
+© 2026 NIT Kurukshetra •
+<a href="contactdev.html" style="color:#93c5fd;">Contact Developers</a>
+</p>
+</footer>
+
+</div>
+
+<script src="js/login.js"></script>
+
+</body>
+</html>
