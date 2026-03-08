@@ -9,19 +9,27 @@ if (!token) {
 // Load profile from backend
 async function loadProfile() {
 
-  const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/user/me", {
-    headers: {
-      "Authorization": "Bearer " + token
-    }
-  });
+  try {
 
-  const user = await res.json();
+    const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/user/me", {
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
 
-  document.getElementById("p-name").value = user.name || "";
-  document.getElementById("p-email").value = user.email || "";
-  document.getElementById("p-roll").value = user.roll || "";
-  document.getElementById("p-hostel").value = user.hostel || "";
-  document.getElementById("p-mobile").value = user.mobile || "";
+    const user = await res.json();
+
+    document.getElementById("p-name").value = user.name || "";
+    document.getElementById("p-email").value = user.email || "";
+    document.getElementById("p-roll").value = user.roll || "";
+    document.getElementById("p-hostel").value = user.hostel || "";
+    document.getElementById("p-mobile").value = user.mobile || "";
+
+  } catch (error) {
+
+    console.error("Profile load error:", error);
+
+  }
 
 }
 
@@ -34,23 +42,31 @@ async function saveProfile() {
   const hostel = document.getElementById("p-hostel").value;
   const mobile = document.getElementById("p-mobile").value;
 
-  await fetch("https://nitkkr-marketplace-api.onrender.com/api/user/me", {
+  try {
 
-    method: "PUT",
+    await fetch("https://nitkkr-marketplace-api.onrender.com/api/user/me", {
 
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
+      method: "PUT",
 
-    body: JSON.stringify({
-      hostel,
-      mobile
-    })
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
 
-  });
+      body: JSON.stringify({
+        hostel,
+        mobile
+      })
 
-  alert("Profile Updated Successfully");
+    });
+
+    alert("Profile Updated Successfully");
+
+  } catch (error) {
+
+    console.error("Profile update error:", error);
+
+  }
 
 }
 

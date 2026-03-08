@@ -1,6 +1,12 @@
-async function loadMyItems() {
+// js/mylistings.js
 
-  const token = localStorage.getItem("token");
+// Minimal auth check
+const token = localStorage.getItem("token");
+if (!token) {
+  window.location.href = "index.html";
+}
+
+async function loadMyItems() {
 
   const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/items/mine", {
 
@@ -34,9 +40,8 @@ async function loadMyItems() {
 
 loadMyItems();
 
-async function markSold(id) {
 
-  const token = localStorage.getItem("token");
+async function markSold(id) {
 
   await fetch(`https://nitkkr-marketplace-api.onrender.com/api/items/${id}/sold`, {
 

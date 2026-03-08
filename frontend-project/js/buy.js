@@ -1,3 +1,11 @@
+// js/buy.js
+
+// Check login using token (minimal safe change)
+const token = localStorage.getItem("token");
+if (!token) {
+  window.location.href = "index.html";
+}
+
 async function loadItems() {
 
   const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/items");

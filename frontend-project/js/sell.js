@@ -1,32 +1,54 @@
-async function createItem() {
+// js/sell.js
 
-  const token = localStorage.getItem("token");
+// Check login
+const token = localStorage.getItem("token");
+
+if (!token) {
+  window.location.href = "index.html";
+}
+
+
+async function createItem() {
 
   const title = document.getElementById("title").value;
   const category = document.getElementById("category").value;
   const price = document.getElementById("price").value;
   const description = document.getElementById("description").value;
 
-  const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/items", {
+  try {
 
-    method: "POST",
+    const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/items", {
 
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
+      method: "POST",
 
-    body: JSON.stringify({
-      title,
-      category,
-      price,
-      description
-    })
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
 
-  });
+      body: JSON.stringify({
+        title,
+        category,
+        price,
+        description
+      })
 
-  const data = await res.json();
+    });
 
-  alert("Item Listed Successfully");
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Item Listed Successfully");
+      window.location.href = "mylistings.html";
+    } else {
+      alert(data.message || "Failed to list item");
+    }
+
+  } catch (error) {
+
+    console.error("Item creation error:", error);
+    alert("Server error while listing item");
+
+  }
 
 }
