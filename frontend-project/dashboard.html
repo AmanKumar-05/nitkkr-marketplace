@@ -76,7 +76,9 @@
 
 <script>
 
-const API_BASE = "http://localhost:3000";
+/* IMPORTANT: Use deployed backend instead of localhost */
+const API_BASE = "https://nitkkr-marketplace-api.onrender.com";
+
 
 async function loadDashboard() {
 
@@ -87,16 +89,24 @@ async function loadDashboard() {
     return;
   }
 
-  const res = await fetch(`${API_BASE}/api/user/me`, {
-    headers: {
-      "Authorization": "Bearer " + token
-    }
-  });
+  try {
 
-  const user = await res.json();
+    const res = await fetch(`${API_BASE}/api/user/me`, {
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
 
-  document.getElementById("welcome-user").innerText =
-    "Welcome, " + user.name + "!";
+    const user = await res.json();
+
+    document.getElementById("welcome-user").innerText =
+      "Welcome, " + (user.name || "User") + "!";
+
+  } catch (error) {
+
+    console.error("Dashboard load error:", error);
+
+  }
 
 }
 

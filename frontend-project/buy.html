@@ -41,16 +41,7 @@
 </section>
 
 
-<!-- Guest Notice
-<section class="guest-banner glass fade-in delay-2" id="guestNotice">
-  <p>
-    You are browsing as a <strong>Guest</strong>.  
-    Login to view prices and contact sellers.
-  </p>
-</section> -->
-
-
-<!-- Search / Filter UI (visual only for now) -->
+<!-- Search / Filter UI -->
 <section class="filter-bar glass fade-in delay-2">
   <input type="text" placeholder="Search items (e.g. chair, kettle, books)" />
 
@@ -94,70 +85,77 @@
 
 <script>
 
-const API_BASE = "http://localhost:3000";
+/* IMPORTANT: Use deployed backend instead of localhost */
+const API_BASE = "https://nitkkr-marketplace-api.onrender.com";
 
 async function loadItems() {
 
   const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
 
-  const res = await fetch(`${API_BASE}/api/items`);
-  const items = await res.json();
+  try {
 
-  const empty = document.querySelector(".empty-state");
-  const section = document.querySelector(".items");
+    const res = await fetch(`${API_BASE}/api/items`);
+    const items = await res.json();
 
-  if (items.length === 0) return;
+    const empty = document.querySelector(".empty-state");
+    const section = document.querySelector(".items");
 
-  empty.style.display = "none";
+    if (!items || items.length === 0) return;
 
-  const grid = document.createElement("div");
-  grid.className = "item-grid";
+    empty.style.display = "none";
 
-  items.forEach(item => {
+    const grid = document.createElement("div");
+    grid.className = "item-grid";
 
-    const card = document.createElement("div");
-    card.className = "item-card glass";
+    items.forEach(item => {
 
-    let priceHTML = "";
-    let contactHTML = "";
+      const card = document.createElement("div");
+      card.className = "item-card glass";
 
-    if (isLoggedIn) {
+      let priceHTML = "";
+      let contactHTML = "";
 
-      priceHTML = `<p class="item-price">₹${item.price}</p>`;
+      if (isLoggedIn) {
 
-      contactHTML = `
+        priceHTML = `<p class="item-price">₹${item.price}</p>`;
+
+        contactHTML = `
 <button onclick="showContact('${item.seller.name}','${item.seller.email}','${item.seller.mobile}','${item.title}')">
 Buy Item
 </button>
 `;
 
-      document.getElementById("guestNotice").style.display = "none";
+      } else {
 
-    } else {
+        priceHTML = `<p class="item-price">Login to view price</p>`;
 
-      priceHTML = `<p class="item-price">Login to view price</p>`;
-      contactHTML = "";
+      }
 
-    }
+      card.innerHTML = `
+        <h3>${item.title}</h3>
+        <p class="item-meta">Category: ${item.category}</p>
+        ${priceHTML}
+        <p>${item.description}</p>
+        ${contactHTML}
+      `;
 
-    card.innerHTML = `
-      <h3>${item.title}</h3>
-      <p class="item-meta">Category: ${item.category}</p>
-      ${priceHTML}
-      <p>${item.description}</p>
-      ${contactHTML}
-    `;
+      grid.appendChild(card);
 
-    grid.appendChild(card);
+    });
 
-  });
+    section.appendChild(grid);
 
-  section.appendChild(grid);
+  } catch (error) {
+
+    console.error("Error loading items:", error);
+
+  }
 
 }
 
 loadItems();
+
 
 function showContact(name, email, mobile, itemTitle) {
 

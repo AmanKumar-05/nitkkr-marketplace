@@ -16,23 +16,19 @@
 
   <!-- Navbar -->
   <nav class="navbar glass fade-in">
-  <div class="nav-left">
-    <img src="nitlogo.png" alt="Logo" class="nav-logo" />
-    <span class="nav-title">NIT KKR Marketplace</span>
-  </div>
+    <div class="nav-left">
+      <img src="nitlogo.png" alt="Logo" class="nav-logo" />
+      <span class="nav-title">NIT KKR Marketplace</span>
+    </div>
 
-  <div class="nav-right">
+    <div class="nav-right">
+      <a href="dashboard.html" class="nav-btn">Dashboard</a>
 
-    <a href="dashboard.html" class="nav-btn">
-      Dashboard
-    </a>
-
-    <a href="profile.html">
-      <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-icon" />
-    </a>
-
-  </div>
-</nav>
+      <a href="profile.html">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-icon" />
+      </a>
+    </div>
+  </nav>
 
   <!-- Page Heading -->
   <section class="welcome fade-in delay-1">
@@ -72,7 +68,9 @@
 
 <script>
 
-const API_BASE = "http://localhost:3000";
+/* IMPORTANT: Use deployed backend instead of localhost */
+const API_BASE = "https://nitkkr-marketplace-api.onrender.com";
+
 
 /* Load user's listed items */
 async function loadMyItems() {
@@ -84,79 +82,96 @@ async function loadMyItems() {
     return;
   }
 
-  const res = await fetch(`${API_BASE}/api/items/mine`, {
-    headers: {
-      "Authorization": "Bearer " + token
+  try {
+
+    const res = await fetch(`${API_BASE}/api/items/mine`, {
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
+    const items = await res.json();
+
+    const emptyState = document.querySelector(".empty-state");
+    const section = document.querySelector(".items");
+
+    if (!items || items.length === 0) {
+      emptyState.style.display = "block";
+      return;
     }
-  });
 
-  const items = await res.json();
+    emptyState.style.display = "none";
 
-  const emptyState = document.querySelector(".empty-state");
-  const section = document.querySelector(".items");
+    const grid = document.createElement("div");
+    grid.className = "item-grid";
 
-  if (items.length === 0) {
-    emptyState.style.display = "block";
-    return;
+    items.forEach(item => {
+
+      const card = document.createElement("div");
+      card.className = "item-card glass";
+
+      let statusHTML = "";
+
+      if (item.status === "sold") {
+
+        statusHTML = `
+          <p style="color: orange; font-weight: bold;">
+            Sold – will be removed in 24 hours
+          </p>
+        `;
+
+      } else {
+
+        statusHTML = `
+          <button onclick="markSold('${item._id}')">
+            Mark Sold
+          </button>
+        `;
+
+      }
+
+      card.innerHTML = `
+        <h3>${item.title}</h3>
+        <p>₹${item.price}</p>
+        ${statusHTML}
+      `;
+
+      grid.appendChild(card);
+
+    });
+
+    section.appendChild(grid);
+
+  } catch (error) {
+
+    console.error("Error loading listings:", error);
+
   }
 
-  emptyState.style.display = "none";
-
-  const grid = document.createElement("div");
-  grid.className = "item-grid";
-
-  items.forEach(item => {
-
-    const card = document.createElement("div");
-    card.className = "item-card glass";
-
-    let statusHTML = "";
-
-    if (item.status === "sold") {
-
-      statusHTML = `
-        <p style="color: orange; font-weight: bold;">
-          Sold – will be removed in 24 hours
-        </p>
-      `;
-
-    } else {
-
-      statusHTML = `
-        <button onclick="markSold('${item._id}')">
-          Mark Sold
-        </button>
-      `;
-
-    }
-
-    card.innerHTML = `
-      <h3>${item.title}</h3>
-      <p>₹${item.price}</p>
-      ${statusHTML}
-    `;
-
-    grid.appendChild(card);
-
-  });
-
-  section.appendChild(grid);
-
 }
+
 
 /* Mark item sold */
 async function markSold(id) {
 
   const token = localStorage.getItem("token");
 
-  await fetch(`${API_BASE}/api/items/${id}/sold`, {
-    method: "PATCH",
-    headers: {
-      "Authorization": "Bearer " + token
-    }
-  });
+  try {
 
-  location.reload();
+    await fetch(`${API_BASE}/api/items/${id}/sold`, {
+      method: "PATCH",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
+    location.reload();
+
+  } catch (error) {
+
+    console.error("Error marking item sold:", error);
+
+  }
 
 }
 
