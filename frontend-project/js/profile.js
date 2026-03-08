@@ -9,7 +9,7 @@ if (!token) {
 // Load profile from backend
 async function loadProfile() {
 
-  const res = await fetch("http://localhost:3000/api/user/me", {
+  const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/user/me", {
     headers: {
       "Authorization": "Bearer " + token
     }
@@ -34,7 +34,7 @@ async function saveProfile() {
   const hostel = document.getElementById("p-hostel").value;
   const mobile = document.getElementById("p-mobile").value;
 
-  await fetch("http://localhost:3000/api/user/me", {
+  await fetch("https://nitkkr-marketplace-api.onrender.com/api/user/me", {
 
     method: "PUT",
 

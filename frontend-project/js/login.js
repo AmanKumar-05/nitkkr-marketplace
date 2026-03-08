@@ -78,7 +78,7 @@ async function sendOTP() {
 
   try {
 
-    const res = await fetch("http://localhost:3000/api/auth/send-otp", {
+    const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/auth/send-otp", {
 
       method: "POST",
 
@@ -156,7 +156,7 @@ async function verifyOTP() {
 
   try {
 
-    const res = await fetch("http://localhost:3000/api/auth/verify-otp", {
+    const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/auth/verify-otp", {
 
       method: "POST",
 

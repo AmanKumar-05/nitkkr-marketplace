@@ -7,7 +7,7 @@ async function createItem() {
   const price = document.getElementById("price").value;
   const description = document.getElementById("description").value;
 
-  const res = await fetch("http://localhost:3000/api/items", {
+  const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/items", {
 
     method: "POST",
 

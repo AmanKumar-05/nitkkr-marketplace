@@ -1,6 +1,6 @@
 async function loadItems() {
 
-  const res = await fetch("http://localhost:3000/api/items");
+  const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/items");
   const items = await res.json();
 
   const container = document.getElementById("items-container");

@@ -2,7 +2,7 @@ async function loadMyItems() {
 
   const token = localStorage.getItem("token");
 
-  const res = await fetch("http://localhost:3000/api/items/mine", {
+  const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/items/mine", {
 
     headers: {
       "Authorization": "Bearer " + token
@@ -38,7 +38,7 @@ async function markSold(id) {
 
   const token = localStorage.getItem("token");
 
-  await fetch(`http://localhost:3000/api/items/${id}/sold`, {
+  await fetch(`https://nitkkr-marketplace-api.onrender.com/api/items/${id}/sold`, {
 
     method: "PATCH",
 
