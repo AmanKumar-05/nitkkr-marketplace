@@ -175,7 +175,19 @@ async function verifyOTP() {
 
     if (data.token) {
 
+      // Save login token
       localStorage.setItem("token", data.token);
+
+      // Determine role safely
+      let role = "student";
+
+      const roll = document.getElementById("roll")?.value;
+
+      if (!roll || roll.trim() === "") {
+        role = "staff";
+      }
+
+      localStorage.setItem("role", role);
 
       window.location.href = "dashboard.html";
 
