@@ -23,6 +23,8 @@ function startTimer() {
   const timerText = document.getElementById("otp-timer");
   const resendBtn = document.getElementById("resend-btn");
 
+  if (!timerText || !resendBtn) return;
+
   resendBtn.disabled = true;
   timeLeft = 120;
 
@@ -37,13 +39,9 @@ function startTimer() {
     timeLeft--;
 
     if (timeLeft < 0) {
-
       clearInterval(timerInterval);
-
       timerText.textContent = "00:00";
-
       resendBtn.disabled = false;
-
     }
 
   }, 1000);
@@ -56,24 +54,46 @@ function startTimer() {
 async function sendOTP() {
 
   const button = document.querySelector("button[onclick='sendOTP()']");
-  button.disabled = true;
-  button.innerText = "Sending OTP...";
+  if (button) {
+    button.disabled = true;
+    button.innerText = "Sending OTP...";
+  }
 
-  const name = document.getElementById("name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const roll = document.getElementById("roll").value.trim();
-  const hostel = document.getElementById("hostel").value.trim();
-  const mobile = document.getElementById("mobile").value.trim();
+  const nameInput = document.getElementById("name");
+  const emailInput = document.getElementById("email");
+  const rollInput = document.getElementById("roll");
+  const hostelInput = document.getElementById("hostel");
+  const mobileInput = document.getElementById("mobile");
+
+  if (!emailInput) return;
+
+  const name = nameInput?.value.trim() || "";
+  const email = emailInput.value.trim();
+  const roll = rollInput?.value.trim() || "";
+  const hostel = hostelInput?.value.trim() || "";
+  const mobile = mobileInput?.value.trim() || "";
 
   if (!email.endsWith("@nitkkr.ac.in")) {
 
     alert("Only NIT KKR email IDs allowed");
 
-    button.disabled = false;
-    button.innerText = "Send OTP";
-
+    if (button) {
+      button.disabled = false;
+      button.innerText = "Send OTP";
+    }
     return;
 
+  }
+
+  // 🔥 VALIDATION ONLY FOR SIGNUP PAGE
+  if (nameInput && (!name || !roll || !hostel || !mobile)) {
+    alert("Please fill all details");
+
+    if (button) {
+      button.disabled = false;
+      button.innerText = "Send OTP";
+    }
+    return;
   }
 
   try {
@@ -81,7 +101,6 @@ async function sendOTP() {
     const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/auth/send-otp", {
 
       method: "POST",
-
       headers: {
         "Content-Type": "application/json"
       },
@@ -103,22 +122,24 @@ async function sendOTP() {
 
       alert(data.message || "Failed to send OTP");
 
-      button.disabled = false;
-      button.innerText = "Send OTP";
-
+      if (button) {
+        button.disabled = false;
+        button.innerText = "Send OTP";
+      }
       return;
 
     }
 
-    // Lock input fields
-    document.getElementById("name").disabled = true;
-    document.getElementById("email").disabled = true;
-    document.getElementById("roll").disabled = true;
-    document.getElementById("hostel").disabled = true;
-    document.getElementById("mobile").disabled = true;
+    // Lock inputs safely
+    if (nameInput) nameInput.disabled = true;
+    emailInput.disabled = true;
+    if (rollInput) rollInput.disabled = true;
+    if (hostelInput) hostelInput.disabled = true;
+    if (mobileInput) mobileInput.disabled = true;
 
     // Show OTP popup
-    document.getElementById("otp-modal").style.display = "flex";
+    const modal = document.getElementById("otp-modal");
+    if (modal) modal.style.display = "flex";
 
     alert(data.message);
 
@@ -127,11 +148,14 @@ async function sendOTP() {
   } catch (error) {
 
     console.error("OTP Error:", error);
+    alert("Server error");
 
-    alert("Server error while sending OTP");
+  } finally {
 
-    button.disabled = false;
-    button.innerText = "Send OTP";
+    if (button) {
+      button.disabled = false;
+      button.innerText = "Send OTP";
+    }
 
   }
 
@@ -141,9 +165,7 @@ async function sendOTP() {
 // ---------------- RESEND OTP ----------------
 
 function resendOTP() {
-
   sendOTP();
-
 }
 
 
@@ -151,15 +173,19 @@ function resendOTP() {
 
 async function verifyOTP() {
 
-  const email = document.getElementById("email").value;
-  const otp = document.getElementById("otp").value;
+  const emailInput = document.getElementById("email");
+  const otpInput = document.getElementById("otp");
+
+  if (!emailInput || !otpInput) return;
+
+  const email = emailInput.value.trim();
+  const otp = otpInput.value.trim();
 
   try {
 
     const res = await fetch("https://nitkkr-marketplace-api.onrender.com/api/auth/verify-otp", {
 
       method: "POST",
-
       headers: {
         "Content-Type": "application/json"
       },
@@ -175,10 +201,8 @@ async function verifyOTP() {
 
     if (data.token) {
 
-      // Save login token
       localStorage.setItem("token", data.token);
 
-      // Determine role safely
       let role = "student";
 
       const roll = document.getElementById("roll")?.value;
@@ -200,7 +224,6 @@ async function verifyOTP() {
   } catch (error) {
 
     console.error("Verify OTP Error:", error);
-
     alert("Verification failed");
 
   }

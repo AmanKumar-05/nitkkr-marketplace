@@ -20,6 +20,13 @@ router.post("/send-otp", async (req, res) => {
 
     let user = await User.findOne({ email });
 
+// new block
+if (!user && (!name || !roll || !hostel || !mobile)) {
+  return res.status(400).json({
+    message: "New users must fill all details"
+  });
+}
+
     if (!user) {
       user = new User({
         name,

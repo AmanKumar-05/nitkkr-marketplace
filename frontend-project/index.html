@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
-<script src="js/main.js"></script>
+
 <body>
 
   <!-- Background -->
@@ -36,6 +36,27 @@
       </ul>
     </section>
 
+
+    <!-- Smart Login Block -->
+<section class="smart-login glass fade-in delay-2">
+
+  <div class="bolt-track">
+    <div class="bolt">⚡</div>
+  </div>
+
+  <div class="smart-text" id="smartText">
+    <h2>Already a user?</h2>
+    <p>Login instantly using your NIT KKR email with OTP ⚡</p>
+
+    <!-- ✅ FIXED BUTTON -->
+    <button class="smart-login-btn" onclick="goToLogin()">
+      Login Now
+    </button>
+  </div>
+
+</section>
+
+
     <!-- Role Selection -->
     <section class="roles fade-in delay-2">
       <h2>Continue As</h2>
@@ -45,7 +66,7 @@
         <div class="role-card glass">
           <h3>Guest</h3>
           <p>
-            Browse available items without seeing prices or seller details.
+            Login as Guest.
           </p>
           <a href="guest.html" class="nav-btn">Continue as Guest</a>
         </div>
@@ -53,9 +74,10 @@
         <div class="role-card glass">
           <h3>Student</h3>
           <p>
-            Login with your NIT KKR ID to buy or sell items.
+            SignUp with your NIT KKR ID to buy or sell items.
           </p>
-          <button onclick="continueAsUser('student')">Continue as Student</button>
+          <!-- ✅ FIXED -->
+          <a href="login.html" class="nav-btn">Continue as Student</a>
         </div>
 
         <div class="role-card glass">
@@ -63,7 +85,8 @@
           <p>
             Verified staff members can list and browse items.
           </p>
-          <button onclick="continueAsUser('staff')">Continue as Staff</button>
+          <!-- ✅ FIXED -->
+          <a href="login.html" class="nav-btn">Continue as Staff</a>
         </div>
 
       </div>
@@ -78,6 +101,36 @@
 </footer>
 
   </div>
+
 <script src="js/main.js"></script>
+
+<script>
+window.addEventListener("load", () => {
+
+  setTimeout(() => {
+    document.getElementById("smartText").classList.add("show");
+  }, 1800);
+
+  // 🔥 SMART BEHAVIOR
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    const btn = document.querySelector(".smart-login-btn");
+
+    btn.innerText = "Go to Dashboard";
+
+    btn.onclick = () => {
+      window.location.href = "dashboard.html";
+    };
+  }
+
+});
+
+// ✅ FIXED ROUTE
+function goToLogin() {
+  window.location.href = "login-email.html";
+}
+</script>
+
 </body>
 </html>

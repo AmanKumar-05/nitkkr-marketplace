@@ -789,3 +789,119 @@ button {
   letter-spacing: normal;
   color: rgba(255,255,255,0.6);
 }
+
+/* SMART LOGIN BLOCK */
+.smart-login {
+  margin: 30px 0;
+  padding: 30px 20px;
+  border-radius: 20px;
+
+  position: relative;
+  overflow: hidden;
+
+  min-height: 160px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Bolt track */
+.bolt-track {
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 100%;
+}
+
+/* Lightning bolt */
+.bolt {
+  font-size: 90px; /* Bigger than box */
+  position: relative;
+  left: -100px;
+  animation: moveBolt 1.8s ease-out forwards;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 0, 0.7));
+}
+
+/* Animation */
+@keyframes moveBolt {
+  0% {
+    left: -100px;
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    left: 75%;
+    opacity: 0.2;
+  }
+}
+
+/* Text */
+.smart-text {
+  opacity: 0;
+  text-align: center;
+  transition: opacity 1s ease;
+}
+
+.smart-text.show {
+  opacity: 1;
+}
+.bolt {
+  font-size: 90px;
+  position: relative;
+  left: -100px;
+  animation: moveBolt 1.8s ease-out forwards, pulse 0.8s infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    filter: drop-shadow(0 0 10px yellow);
+  }
+  to {
+    filter: drop-shadow(0 0 25px orange);
+  }
+}
+.smart-login-btn {
+  margin-top: 20px;
+
+  /* Bigger + better proportion */
+  padding: 14px 40px;
+  border-radius: 30px;
+  border: none;
+
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  /* Clean gradient (same theme but stronger) */
+  background: linear-gradient(135deg, #38bdf8, #3b82f6);
+  color: white;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+/* Hover */
+.smart-login-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+}
+
+/* Click feel */
+.smart-login-btn:active {
+  transform: scale(0.96);
+}
+
+.smart-text {
+  opacity: 0;
+  text-align: center;
+  transition: opacity 1s ease;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

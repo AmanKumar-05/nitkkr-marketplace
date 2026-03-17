@@ -50,4 +50,18 @@ router.put("/me", authMiddleware, async (req, res) => {
 
 });
 
+// Check if user exists
+router.post("/check", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    res.json({ exists: !!user });
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
