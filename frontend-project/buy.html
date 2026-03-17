@@ -170,7 +170,11 @@ Buy Item
     card.className = "item-card glass";
 
     card.innerHTML = `
-      <img src="${item.image || 'https://via.placeholder.com/300x200'}" class="item-img" />
+      <img 
+  src="${item.image || 'https://via.placeholder.com/300x200'}" 
+  class="item-img"
+  onclick="openImage('${item.image || 'https://via.placeholder.com/300x200'}')"
+/>
       <h3>${item.title}</h3>
       <p class="item-meta">Category: ${item.category}</p>
       ${priceHTML}
@@ -242,7 +246,28 @@ ${mobile ? "WhatsApp chat will open after closing this message." : "WhatsApp not
 
 }
 
+function openImage(src) {
+
+  const modal = document.getElementById("imageModal");
+  const modalImg = document.getElementById("modalImage");
+
+  modal.style.display = "block";
+  modalImg.src = src;
+
+}
+
+function closeImage() {
+
+  document.getElementById("imageModal").style.display = "none";
+
+}
 </script>
+
+<!-- IMAGE MODAL -->
+<div id="imageModal" class="image-modal">
+  <span class="close-modal" onclick="closeImage()">×</span>
+  <img id="modalImage" />
+</div>
 
 </body>
 </html>
