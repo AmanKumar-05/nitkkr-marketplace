@@ -92,6 +92,80 @@
       </div>
     </section>
 
+    <!--  additional sections below roles -->
+
+    <section class="how-it-works fade-in delay-3">
+
+  <h2>How It Works</h2>
+
+  <div class="steps">
+
+    <div class="step glass">
+      <h3>🔐 1. Login</h3>
+      <p>Use your NIT email to access the marketplace.</p>
+    </div>
+
+    <div class="step glass">
+      <h3>🛒 2. Browse or List</h3>
+      <p>Explore items or list your own for sale.</p>
+    </div>
+
+    <div class="step glass">
+      <h3>📞 3. Connect</h3>
+      <p>Contact seller directly via WhatsApp or email.</p>
+    </div>
+
+  </div>
+
+</section>
+    <section class="faq glass fade-in delay-3">
+  <h2>Frequently Asked Questions</h2>
+
+  <div class="faq-item">
+    <h3 onclick="toggleFAQ(this)">How do I buy an item?</h3>
+    <p>Browse items, click “Buy”, and you will be redirected to Whatsapp-Chat of Seller.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 onclick="toggleFAQ(this)">Is payment done on this platform?</h3>
+    <p>No. All transactions happen offline between buyer and seller.</p>
+  </div>
+
+  <div class="faq-item">
+    <h3 onclick="toggleFAQ(this)">Who can use this marketplace?</h3>
+    <p>Only NIT Kurukshetra students and staff can use this for now.</p>
+  </div>
+
+</section>
+
+<section class="trust glass fade-in delay-3">
+  <h2>Why This Marketplace?</h2>
+
+  <ul>
+    <li>✔ Only verified NIT KKR users</li>
+    <li>✔ No hidden charges</li>
+    <li>✔ Direct buyer-seller communication</li>
+    <li>✔ Safe and campus-focused</li>
+  </ul>
+
+</section>
+<section class="stats fade-in delay-3">
+  <div class="stat glass">
+    <h2>-</h2>
+    <p>Items Listed</p>
+  </div>
+
+  <div class="stat glass">
+    <h2>-</h2>
+    <p>Active Users</p>
+  </div>
+
+  <div class="stat glass">
+    <h2>0%</h2>
+    <p>Platform Fees</p>
+  </div>
+</section>
+
     <!-- Footer -->
 <footer class="footer fade-in delay-3">
   <p>
@@ -130,6 +204,36 @@ window.addEventListener("load", () => {
 function goToLogin() {
   window.location.href = "login-email.html";
 }
+</script>
+
+<script>
+function toggleFAQ(el) {
+  const item = el.parentElement;
+
+  // close others
+  document.querySelectorAll(".faq-item").forEach(i => {
+    if (i !== item) i.classList.remove("active");
+  });
+
+  // toggle current
+  item.classList.toggle("active");
+
+}
+</script>
+
+<script>const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+    }
+  });
+}, {
+  threshold: 0.3
+});
+
+document.querySelectorAll(".step").forEach(step => {
+  observer.observe(step);
+});
 </script>
 
 </body>
