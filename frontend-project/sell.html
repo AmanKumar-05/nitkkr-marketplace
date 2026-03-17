@@ -21,18 +21,12 @@
   </div>
 
   <div class="nav-right">
-
-    <a href="dashboard.html" class="nav-btn">
-      Dashboard
-    </a>
-
+    <a href="dashboard.html" class="nav-btn">Dashboard</a>
     <a href="profile.html">
       <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-icon" />
     </a>
-
   </div>
 </nav>
-
 
 <!-- Heading -->
 <section class="welcome fade-in delay-1">
@@ -40,11 +34,10 @@
   <p>List an item you want to sell within the campus marketplace.</p>
 </section>
 
-
 <!-- Sell Form -->
 <section class="sell-form glass fade-in delay-2">
 
-<form>
+<form onsubmit="return false;">
 
 <div class="form-group">
 <label>Item Name</label>
@@ -86,7 +79,17 @@
 
 <div class="form-group">
 <label>Upload Item Image</label>
-<input type="file" />
+
+<input 
+  type="file" 
+  id="image" 
+  accept="image/*" 
+  onchange="previewImage(event)" 
+/>
+
+<!-- 🔥 IMAGE PREVIEW -->
+<img id="preview" class="image-preview" style="display:none;" />
+
 </div>
 
 <div class="form-actions">
@@ -96,7 +99,6 @@
 </form>
 
 </section>
-
 
 <!-- Footer -->
 <footer class="footer fade-in delay-3">
@@ -108,13 +110,32 @@
 
 </div>
 
-
 <script src="js/dashboard.js"></script>
 
 <script>
 
 const API_BASE = "https://nitkkr-marketplace-api.onrender.com";
 
+// 🔥 IMAGE PREVIEW FUNCTION
+function previewImage(event) {
+
+  const file = event.target.files[0];
+  const preview = document.getElementById("preview");
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function () {
+    preview.src = reader.result;
+    preview.style.display = "block";
+  };
+
+  reader.readAsDataURL(file);
+}
+
+
+// 🔥 CREATE ITEM
 async function createItem() {
 
   const token = localStorage.getItem("token");
@@ -125,37 +146,64 @@ async function createItem() {
     return;
   }
 
-  const title = document.getElementById("title").value;
+  const title = document.getElementById("title").value.trim();
   const category = document.getElementById("category").value;
   const price = document.getElementById("price").value;
-  const description = document.getElementById("description").value;
+  const description = document.getElementById("description").value.trim();
 
-  const res = await fetch(`${API_BASE}/api/items`, {
+  // ✅ VALIDATION
+  if (!title || !price) {
+    alert("Please fill Title and Price");
+    return;
+  }
 
-    method: "POST",
+  if (!category || category === "Select category") {
+    alert("Please select a category");
+    return;
+  }
 
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
+  const formData = new FormData();
 
-    body: JSON.stringify({
-      title,
-      category,
-      price,
-      description
-    })
+  formData.append("title", title);
+  formData.append("category", category);
+  formData.append("price", price);
+  formData.append("description", description);
 
-  });
+  const imageFile = document.getElementById("image").files[0];
 
-  if (res.ok) {
+  if (imageFile) {
+    formData.append("image", imageFile);
+  }
 
-    alert("Item listed successfully!");
-    window.location.href = "mylistings.html";
+  try {
 
-  } else {
+    const res = await fetch(`${API_BASE}/api/items`, {
 
-    alert("Error listing item");
+      method: "POST",
+
+      headers: {
+        "Authorization": "Bearer " + token
+      },
+
+      body: formData
+    });
+
+    if (res.ok) {
+
+      alert("Item listed successfully!");
+      window.location.href = "mylistings.html";
+
+    } else {
+
+      const err = await res.json();
+      alert(err.message || "Error listing item");
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+    alert("Server error");
 
   }
 

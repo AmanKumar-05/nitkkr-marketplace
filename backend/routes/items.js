@@ -4,9 +4,26 @@ const Item = require("../models/Item");
 const jwt = require("jsonwebtoken");
 const sendEmail = require("../utils/mailer");
 const User = require("../models/User");
+const multer = require("multer");
+const cloudinary = require("../utils/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 
-// Auth middleware
+// ---------------- CLOUDINARY STORAGE ----------------
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "nit_marketplace",
+    allowed_formats: ["jpg", "png", "jpeg"]
+  }
+});
+
+const upload = multer({ storage });
+
+
+// ---------------- AUTH MIDDLEWARE ----------------
+
 function auth(req, res, next) {
 
   const authHeader = req.headers.authorization;
@@ -27,86 +44,128 @@ function auth(req, res, next) {
 }
 
 
-// CREATE ITEM
-router.post("/", auth, async (req, res) => {
+// ---------------- CREATE ITEM (UPDATED) ----------------
 
-  const { title, category, price, description } = req.body;
+router.post("/", auth, upload.single("image"), async (req, res) => {
 
-  const item = new Item({
-    title,
-    category,
-    price,
-    description,
-    seller: req.userId
-  });
+  try {
 
-  await item.save();
-  const user = await User.findById(req.userId);
+    const { title, category, price, description } = req.body;
 
-await sendEmail(
-  user.email,
-  "Item Listed Successfully",
-  `Your item "${item.title}" has been listed successfully on the NIT KKR Marketplace.
+    // ✅ Get image URL from Cloudinary
+    const imageUrl = req.file?.path || "";
+
+    const item = new Item({
+      title,
+      category,
+      price,
+      description,
+      seller: req.userId,
+      image: imageUrl
+    });
+
+    await item.save();
+
+    const user = await User.findById(req.userId);
+
+    await sendEmail(
+      user.email,
+      "Item Listed Successfully",
+      `Your item "${item.title}" has been listed successfully on the NIT KKR Marketplace.
 
 Price: ₹${item.price}
 
 Please remember to mark the item as SOLD once it is no longer available.`
-);
+    );
 
-  res.json(item);
+    res.json(item);
+
+  } catch (error) {
+
+    console.error("Create Item Error:", error);
+    res.status(500).json({ message: "Error creating item" });
+
+  }
 
 });
 
 
-// GET ALL ITEMS
+// ---------------- GET ALL ITEMS ----------------
+
 router.get("/", async (req, res) => {
 
-  const items = await Item.find({ status: "available" })
-    .populate("seller", "name email mobile");
+  try {
 
-  res.json(items);
+    const items = await Item.find({ status: "available" })
+      .populate("seller", "name email mobile");
+
+    res.json(items);
+
+  } catch (error) {
+
+    res.status(500).json({ message: "Error fetching items" });
+
+  }
 
 });
 
 
-// MY LISTINGS
+// ---------------- MY LISTINGS ----------------
+
 router.get("/mine", auth, async (req, res) => {
 
-  const items = await Item.find({ seller: req.userId });
+  try {
 
-  res.json(items);
+    const items = await Item.find({ seller: req.userId });
+
+    res.json(items);
+
+  } catch (error) {
+
+    res.status(500).json({ message: "Error fetching listings" });
+
+  }
 
 });
 
 
-// MARK SOLD
+// ---------------- MARK SOLD ----------------
+
 router.patch("/:id/sold", auth, async (req, res) => {
 
-  const item = await Item.findById(req.params.id);
+  try {
 
-  if (!item) {
-    return res.status(404).json({ message: "Item not found" });
-  }
+    const item = await Item.findById(req.params.id);
 
-  if (item.seller.toString() !== req.userId) {
-    return res.status(403).json({ message: "Not allowed" });
-  }
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
 
-  item.status = "sold";
+    if (item.seller.toString() !== req.userId) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
 
-  await item.save();
+    item.status = "sold";
 
-  const user = await User.findById(req.userId);
+    await item.save();
 
-  await sendEmail(
-    user.email,
-    "Item Marked as SOLD",
-    `Your item "${item.title}" has been marked as SOLD on the NIT KKR Marketplace.
+    const user = await User.findById(req.userId);
+
+    await sendEmail(
+      user.email,
+      "Item Marked as SOLD",
+      `Your item "${item.title}" has been marked as SOLD on the NIT KKR Marketplace.
 
 Thank you for using the marketplace.`
-  );
+    );
 
-  res.json({ message: "Item marked sold" });
+    res.json({ message: "Item marked sold" });
+
+  } catch (error) {
+
+    res.status(500).json({ message: "Error updating item" });
+
+  }
 
 });
 

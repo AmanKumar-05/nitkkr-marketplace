@@ -43,16 +43,23 @@
 
 <!-- Search / Filter UI -->
 <section class="filter-bar glass fade-in delay-2">
-  <input type="text" placeholder="Search items (e.g. chair, kettle, books)" />
 
-  <select>
-    <option selected disabled>Filter by Category</option>
+  <input 
+    type="text" 
+    id="searchInput"
+    placeholder="Search items (e.g. chair, kettle, books)" 
+    oninput="filterItems()"
+  />
+
+  <select id="categoryFilter" onchange="filterItems()">
+    <option value="">All Categories</option>
     <option>Furniture</option>
     <option>Electronics</option>
     <option>Books</option>
     <option>Hostel Essentials</option>
     <option>Others</option>
   </select>
+
 </section>
 
 
@@ -85,66 +92,20 @@
 
 <script>
 
-/* IMPORTANT: Use deployed backend instead of localhost */
 const API_BASE = "https://nitkkr-marketplace-api.onrender.com";
 
-async function loadItems() {
+let allItems = [];
 
-  const token = localStorage.getItem("token");
-  const isLoggedIn = !!token;
+// ---------------- LOAD ITEMS ----------------
+
+async function loadItems() {
 
   try {
 
     const res = await fetch(`${API_BASE}/api/items`);
-    const items = await res.json();
+    allItems = await res.json();
 
-    const empty = document.querySelector(".empty-state");
-    const section = document.querySelector(".items");
-
-    if (!items || items.length === 0) return;
-
-    empty.style.display = "none";
-
-    const grid = document.createElement("div");
-    grid.className = "item-grid";
-
-    items.forEach(item => {
-
-      const card = document.createElement("div");
-      card.className = "item-card glass";
-
-      let priceHTML = "";
-      let contactHTML = "";
-
-      if (isLoggedIn) {
-
-        priceHTML = `<p class="item-price">₹${item.price}</p>`;
-
-        contactHTML = `
-<button onclick="showContact('${item.seller.name}','${item.seller.email}','${item.seller.mobile}','${item.title}')">
-Buy Item
-</button>
-`;
-
-      } else {
-
-        priceHTML = `<p class="item-price">Login to view price</p>`;
-
-      }
-
-      card.innerHTML = `
-        <h3>${item.title}</h3>
-        <p class="item-meta">Category: ${item.category}</p>
-        ${priceHTML}
-        <p>${item.description}</p>
-        ${contactHTML}
-      `;
-
-      grid.appendChild(card);
-
-    });
-
-    section.appendChild(grid);
+    displayItems(allItems);
 
   } catch (error) {
 
@@ -157,6 +118,101 @@ Buy Item
 loadItems();
 
 
+// ---------------- DISPLAY ITEMS ----------------
+
+function displayItems(items) {
+
+  const token = localStorage.getItem("token");
+  const isLoggedIn = !!token;
+
+  const empty = document.querySelector(".empty-state");
+  const section = document.querySelector(".items");
+
+  section.innerHTML = "";
+
+  if (!items || items.length === 0) {
+    empty.style.display = "block";
+    section.appendChild(empty);
+    return;
+  }
+
+  empty.style.display = "none";
+
+  const grid = document.createElement("div");
+  grid.className = "item-grid";
+
+  items.forEach(item => {
+
+    const sellerName = item.seller?.name || "Unknown";
+    const sellerEmail = item.seller?.email || "Not available";
+    const sellerMobile = item.seller?.mobile || "";
+
+    let priceHTML = "";
+    let contactHTML = "";
+
+    if (isLoggedIn) {
+
+      priceHTML = `<p class="item-price">₹${item.price}</p>`;
+
+      contactHTML = `
+<button onclick="showContact('${sellerName}','${sellerEmail}','${sellerMobile}','${item.title}')">
+Buy Item
+</button>
+`;
+
+    } else {
+
+      priceHTML = `<p class="item-price">Login to view price</p>`;
+
+    }
+
+    const card = document.createElement("div");
+    card.className = "item-card glass";
+
+    card.innerHTML = `
+      <img src="${item.image || 'https://via.placeholder.com/300x200'}" class="item-img" />
+      <h3>${item.title}</h3>
+      <p class="item-meta">Category: ${item.category}</p>
+      ${priceHTML}
+      <p>${item.description}</p>
+      ${contactHTML}
+    `;
+
+    grid.appendChild(card);
+
+  });
+
+  section.appendChild(grid);
+}
+
+
+// ---------------- FILTER FUNCTION ----------------
+
+function filterItems() {
+
+  const searchText = document.getElementById("searchInput").value.toLowerCase();
+  const category = document.getElementById("categoryFilter").value;
+
+  const filtered = allItems.filter(item => {
+
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchText) ||
+      item.description.toLowerCase().includes(searchText);
+
+    const matchesCategory =
+      category === "" || item.category === category;
+
+    return matchesSearch && matchesCategory;
+
+  });
+
+  displayItems(filtered);
+
+}
+
+
+// ---------------- CONTACT FUNCTION ----------------
+
 function showContact(name, email, mobile, itemTitle) {
 
   const message =
@@ -164,19 +220,25 @@ function showContact(name, email, mobile, itemTitle) {
 
   const encodedMessage = encodeURIComponent(message);
 
-  const whatsappLink = `https://wa.me/91${mobile}?text=${encodedMessage}`;
+  let whatsappLink = "";
+
+  if (mobile) {
+    whatsappLink = `https://wa.me/91${mobile}?text=${encodedMessage}`;
+  }
 
   alert(
 `Seller: ${name}
 
 Email: ${email}
 
-Mobile: ${mobile}
+Mobile: ${mobile || "Not available"}
 
-WhatsApp chat will open after closing this message.`
+${mobile ? "WhatsApp chat will open after closing this message." : "WhatsApp not available"}`
   );
 
-  window.open(whatsappLink, "_blank");
+  if (mobile) {
+    window.open(whatsappLink, "_blank");
+  }
 
 }
 

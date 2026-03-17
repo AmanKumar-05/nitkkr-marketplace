@@ -13,6 +13,12 @@ const itemSchema = new mongoose.Schema({
 
   description: String,
 
+  // ✅ NEW FIELD (IMAGE URL)
+  image: {
+    type: String,
+    default: ""
+  },
+
   seller: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
