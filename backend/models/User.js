@@ -18,10 +18,6 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
-  roll: {
-    type: String
-  },
-
   hostel: {
     type: String
   },

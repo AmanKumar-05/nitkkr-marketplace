@@ -21,7 +21,6 @@ async function loadProfile() {
 
     document.getElementById("p-name").value = user.name || "";
     document.getElementById("p-email").value = user.email || "";
-    document.getElementById("p-roll").value = user.roll || "";
     document.getElementById("p-hostel").value = user.hostel || "";
     document.getElementById("p-mobile").value = user.mobile || "";
 

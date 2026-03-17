@@ -2,11 +2,9 @@ window.addEventListener("load", function () {
 
   const role = localStorage.getItem("role");
 
-  const rollGroup = document.getElementById("roll-group");
   const hostelGroup = document.getElementById("hostel-group");
 
   if (role === "staff") {
-    if (rollGroup) rollGroup.style.display = "none";
     if (hostelGroup) hostelGroup.style.display = "none";
   }
 
@@ -61,7 +59,6 @@ async function sendOTP() {
 
   const nameInput = document.getElementById("name");
   const emailInput = document.getElementById("email");
-  const rollInput = document.getElementById("roll");
   const hostelInput = document.getElementById("hostel");
   const mobileInput = document.getElementById("mobile");
 
@@ -69,7 +66,6 @@ async function sendOTP() {
 
   const name = nameInput?.value.trim() || "";
   const email = emailInput.value.trim();
-  const roll = rollInput?.value.trim() || "";
   const hostel = hostelInput?.value.trim() || "";
   const mobile = mobileInput?.value.trim() || "";
 
@@ -85,15 +81,16 @@ async function sendOTP() {
 
   }
 
-  // 🔥 VALIDATION ONLY FOR SIGNUP PAGE
-  if (nameInput && (!name || !roll || !hostel || !mobile)) {
-    alert("Please fill all details");
-
-    if (button) {
-      button.disabled = false;
-      button.innerText = "Send OTP";
+  // ✅ VALIDATION ONLY FOR SIGNUP PAGE
+  if (nameInput) {
+    if (!name || !hostel || !mobile) {
+      alert("Please fill all details");
+      if (button) {
+        button.disabled = false;
+        button.innerText = "Send OTP";
+      }
+      return;
     }
-    return;
   }
 
   try {
@@ -109,7 +106,6 @@ async function sendOTP() {
         name,
         email,
         role: "student",
-        roll,
         hostel,
         mobile
       })
@@ -130,10 +126,9 @@ async function sendOTP() {
 
     }
 
-    // Lock inputs safely
+    // 🔒 Lock inputs safely
     if (nameInput) nameInput.disabled = true;
     emailInput.disabled = true;
-    if (rollInput) rollInput.disabled = true;
     if (hostelInput) hostelInput.disabled = true;
     if (mobileInput) mobileInput.disabled = true;
 
@@ -203,14 +198,8 @@ async function verifyOTP() {
 
       localStorage.setItem("token", data.token);
 
-      let role = "student";
-
-      const roll = document.getElementById("roll")?.value;
-
-      if (!roll || roll.trim() === "") {
-        role = "staff";
-      }
-
+      // ✅ SIMPLE ROLE SYSTEM (NO ROLL DEPENDENCY)
+      const role = localStorage.getItem("role") || "student";
       localStorage.setItem("role", role);
 
       window.location.href = "dashboard.html";
