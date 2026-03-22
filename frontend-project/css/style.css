@@ -1396,10 +1396,10 @@ html {
   border-radius: 15px;
 }
 
-/* ================= DASHBOARD FIX (PROFESSIONAL GRID) ================= */
+/* ================= DASHBOARD ONLY FIX ================= */
 
-.container .role-cards {
-  display: grid !important;
+.dashboard-page .role-cards {
+  display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 25px;
   max-width: 900px;
@@ -1407,7 +1407,7 @@ html {
 }
 
 /* CARD STRUCTURE */
-.container .role-card {
+.dashboard-page .role-card {
   min-height: 180px;
   display: flex;
   flex-direction: column;
@@ -1415,30 +1415,30 @@ html {
   transition: all 0.3s ease;
 }
 
-/* HOVER EFFECT (CLEAN + PROFESSIONAL) */
-.container .role-card:hover {
+/* HOVER EFFECT */
+.dashboard-page .role-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 
 /* BUTTON ALIGNMENT */
-.container .role-card button {
+.dashboard-page .role-card button {
   align-self: center;
 }
 
 /* TEXT IMPROVEMENT */
-.container .role-card h3 {
+.dashboard-page .role-card h3 {
   margin-bottom: 8px;
 }
 
-.container .role-card p {
+.dashboard-page .role-card p {
   font-size: 14px;
   line-height: 1.4;
   opacity: 0.9;
 }
 
-/* OPTIONAL: SMOOTH ENTRY ANIMATION */
-.container .role-card {
+/* ENTRY ANIMATION */
+.dashboard-page .role-card {
   animation: fadeUp 0.5s ease forwards;
 }
 
