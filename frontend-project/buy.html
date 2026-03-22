@@ -125,18 +125,21 @@ function displayItems(items) {
   const token = localStorage.getItem("token");
   const isLoggedIn = !!token;
 
-  const empty = document.querySelector(".empty-state");
   const section = document.querySelector(".items");
 
+  // Clear everything cleanly
   section.innerHTML = "";
 
   if (!items || items.length === 0) {
-    empty.style.display = "block";
-    section.appendChild(empty);
+
+    section.innerHTML = `
+      <div class="empty-state glass">
+        <h3>No items found</h3>
+        <p>Try changing your search or filter.</p>
+      </div>
+    `;
     return;
   }
-
-  empty.style.display = "none";
 
   const grid = document.createElement("div");
   grid.className = "item-grid";
@@ -147,6 +150,9 @@ function displayItems(items) {
     const sellerEmail = item.seller?.email || "Not available";
     const sellerMobile = item.seller?.mobile || "";
 
+    const safeTitle = item.title || "Item";
+    const safeDesc = item.description || "";
+
     let priceHTML = "";
     let contactHTML = "";
 
@@ -155,7 +161,7 @@ function displayItems(items) {
       priceHTML = `<p class="item-price">₹${item.price}</p>`;
 
       contactHTML = `
-<button onclick="showContact('${sellerName}','${sellerEmail}','${sellerMobile}','${item.title}')">
+<button onclick="showContact('${sellerName}','${sellerEmail}','${sellerMobile}','${safeTitle}')">
 Buy Item
 </button>
 `;
@@ -171,14 +177,14 @@ Buy Item
 
     card.innerHTML = `
       <img 
-  src="${item.image || 'https://via.placeholder.com/300x200'}" 
-  class="item-img"
-  onclick="openImage('${item.image || 'https://via.placeholder.com/300x200'}')"
-/>
-      <h3>${item.title}</h3>
-      <p class="item-meta">Category: ${item.category}</p>
+        src="${item.image || 'https://via.placeholder.com/300x200'}" 
+        class="item-img"
+        onclick="openImage('${item.image || 'https://via.placeholder.com/300x200'}')"
+      />
+      <h3>${safeTitle}</h3>
+      <p class="item-meta">Category: ${item.category || "Others"}</p>
       ${priceHTML}
-      <p>${item.description}</p>
+      <p>${safeDesc}</p>
       ${contactHTML}
     `;
 
@@ -199,12 +205,15 @@ function filterItems() {
 
   const filtered = allItems.filter(item => {
 
+    const title = item.title?.toLowerCase() || "";
+    const desc = item.description?.toLowerCase() || "";
+
     const matchesSearch =
-      item.title.toLowerCase().includes(searchText) ||
-      item.description.toLowerCase().includes(searchText);
+      title.includes(searchText) ||
+      desc.includes(searchText);
 
     const matchesCategory =
-      category === "" || item.category === category;
+      !category || item.category === category;
 
     return matchesSearch && matchesCategory;
 
@@ -246,10 +255,15 @@ ${mobile ? "WhatsApp chat will open after closing this message." : "WhatsApp not
 
 }
 
+
+// ---------------- IMAGE MODAL ----------------
+
 function openImage(src) {
 
   const modal = document.getElementById("imageModal");
   const modalImg = document.getElementById("modalImage");
+
+  if (!modal || !modalImg) return;
 
   modal.style.display = "block";
   modalImg.src = src;
@@ -258,9 +272,11 @@ function openImage(src) {
 
 function closeImage() {
 
-  document.getElementById("imageModal").style.display = "none";
+  const modal = document.getElementById("imageModal");
+  if (modal) modal.style.display = "none";
 
 }
+
 </script>
 
 <!-- IMAGE MODAL -->
