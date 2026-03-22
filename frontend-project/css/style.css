@@ -1396,59 +1396,58 @@ html {
   border-radius: 15px;
 }
 
-/* ================= DASHBOARD ONLY FIX ================= */
+/* ================= DASHBOARD ONLY FIX (FINAL) ================= */
 
-.dashboard-page .role-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 25px;
+body.dashboard-page .container .role-cards {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 25px !important;
   max-width: 900px;
   margin: 40px auto 0;
 }
 
 /* CARD STRUCTURE */
-.dashboard-page .role-card {
+body.dashboard-page .container .role-card {
   min-height: 180px;
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   justify-content: space-between;
+  padding: 20px;
   transition: all 0.3s ease;
 }
 
 /* HOVER EFFECT */
-.dashboard-page .role-card:hover {
+body.dashboard-page .container .role-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 
 /* BUTTON ALIGNMENT */
-.dashboard-page .role-card button {
+body.dashboard-page .container .role-card button,
+body.dashboard-page .container .role-card .action-link {
   align-self: center;
+  margin-top: 10px;
 }
 
 /* TEXT IMPROVEMENT */
-.dashboard-page .role-card h3 {
+body.dashboard-page .container .role-card h2,
+body.dashboard-page .container .role-card h3 {
   margin-bottom: 8px;
 }
 
-.dashboard-page .role-card p {
+body.dashboard-page .container .role-card p {
   font-size: 14px;
   line-height: 1.4;
   opacity: 0.9;
 }
 
 /* ENTRY ANIMATION */
-.dashboard-page .role-card {
+body.dashboard-page .container .role-card {
   animation: fadeUp 0.5s ease forwards;
 }
 
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* SAFETY: PREVENT OVERFLOW */
+body.dashboard-page .container .actions {
+  display: flex;
+  justify-content: center;
 }
