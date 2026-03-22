@@ -77,7 +77,9 @@
             SignUp with your NIT KKR ID to buy or sell items.
           </p>
           <!-- ✅ FIXED -->
-          <a href="login.html" class="nav-btn">Continue as Student</a>
+          <button class="nav-btn" onclick="continueAsUser('student')">
+  Continue as Student
+</button>
         </div>
 
         <div class="role-card glass">
@@ -86,7 +88,9 @@
             Verified staff members can list and browse items.
           </p>
           <!-- ✅ FIXED -->
-          <a href="login.html" class="nav-btn">Continue as Staff</a>
+          <button class="nav-btn" onclick="continueAsUser('staff')">
+  Continue as Staff
+</button>
         </div>
 
       </div>
@@ -203,6 +207,10 @@ window.addEventListener("load", () => {
 // ✅ FIXED ROUTE
 function goToLogin() {
   window.location.href = "login-email.html";
+}
+function continueAsUser(role) {
+  localStorage.setItem("role", role);
+  window.location.href = "login.html";
 }
 </script>
 

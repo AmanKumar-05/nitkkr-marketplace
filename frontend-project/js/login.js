@@ -69,26 +69,33 @@ async function sendOTP() {
   const hostel = hostelInput?.value.trim() || "";
   const mobile = mobileInput?.value.trim() || "";
 
+  // ✅ Email validation
   if (!email.endsWith("@nitkkr.ac.in")) {
 
     alert("Only NIT KKR email IDs allowed");
 
-    if (button) {
-      button.disabled = false;
-      button.innerText = "Send OTP";
-    }
+    resetButton(button);
     return;
-
   }
 
-  // ✅ VALIDATION ONLY FOR SIGNUP PAGE
-  if (nameInput) {
-    if (!name || !hostel || !mobile) {
-      alert("Please fill all details");
-      if (button) {
-        button.disabled = false;
-        button.innerText = "Send OTP";
-      }
+  // 🔥 FIXED VALIDATION (ONLY FOR VISIBLE FIELDS)
+  if (nameInput && nameInput.offsetParent !== null) {
+
+    if (!name) {
+      alert("Please enter your name");
+      resetButton(button);
+      return;
+    }
+
+    if (hostelInput && hostelInput.offsetParent !== null && !hostel) {
+      alert("Please enter hostel");
+      resetButton(button);
+      return;
+    }
+
+    if (mobileInput && mobileInput.offsetParent !== null && !mobile) {
+      alert("Please enter mobile number");
+      resetButton(button);
       return;
     }
   }
@@ -117,13 +124,8 @@ async function sendOTP() {
     if (!res.ok) {
 
       alert(data.message || "Failed to send OTP");
-
-      if (button) {
-        button.disabled = false;
-        button.innerText = "Send OTP";
-      }
+      resetButton(button);
       return;
-
     }
 
     // 🔒 Lock inputs safely
@@ -147,11 +149,7 @@ async function sendOTP() {
 
   } finally {
 
-    if (button) {
-      button.disabled = false;
-      button.innerText = "Send OTP";
-    }
-
+    resetButton(button);
   }
 
 }
@@ -198,7 +196,6 @@ async function verifyOTP() {
 
       localStorage.setItem("token", data.token);
 
-      // ✅ SIMPLE ROLE SYSTEM (NO ROLL DEPENDENCY)
       const role = localStorage.getItem("role") || "student";
       localStorage.setItem("role", role);
 
@@ -217,4 +214,13 @@ async function verifyOTP() {
 
   }
 
+}
+
+
+// 🔧 HELPER FUNCTION
+function resetButton(button) {
+  if (button) {
+    button.disabled = false;
+    button.innerText = "Send OTP";
+  }
 }
