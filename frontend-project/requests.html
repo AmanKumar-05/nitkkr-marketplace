@@ -3,35 +3,58 @@
 <head>
 <meta charset="UTF-8" />
 <title>Requests | NIT KKR Marketplace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <link rel="stylesheet" href="css/style.css" />
 </head>
 
 <body>
 
+<div class="bg"></div>
+
 <div class="container">
 
+<!-- Navbar -->
 <nav class="navbar glass">
   <a href="dashboard.html" class="nav-btn">Dashboard</a>
 </nav>
 
-<section class="welcome">
+<!-- Heading -->
+<section class="welcome fade-in">
   <h1>Request Board</h1>
-  <p>Post what you need or help others.</p>
+  <p>Post what you need or help others fulfill requests</p>
 </section>
 
-<section class="glass" style="padding:20px; margin-bottom:20px;">
+<!-- REQUEST FORM -->
+<section class="request-wrapper fade-in">
 
-<h3>Post a Request</h3>
+  <div class="request-card glass">
 
-<input id="r-title" placeholder="What do you need?" />
-<input id="r-budget" placeholder="Budget (optional)" />
-<textarea id="r-desc" placeholder="Description"></textarea>
+    <h2>Post a Request</h2>
+    <p class="request-subtext">
+      Looking for something? Let others help you.
+    </p>
 
-<button onclick="createRequest()">Post Request</button>
+    <div class="request-form">
+
+      <input id="r-title" placeholder="What do you need?" />
+
+      <input id="r-budget" placeholder="Budget (optional ₹)" />
+
+      <textarea id="r-desc" placeholder="Describe your requirement"></textarea>
+
+      <button onclick="createRequest()">Post Request</button>
+
+    </div>
+
+  </div>
 
 </section>
 
-<section id="requests-container"></section>
+<!-- REQUEST FEED -->
+<section class="request-feed fade-in">
+  <h2>Recent Requests</h2>
+  <div id="requests-container"></div>
+</section>
 
 </div>
 
@@ -39,72 +62,145 @@
 
 const API = "https://nitkkr-marketplace-api.onrender.com";
 
+// ---------------- LOAD REQUESTS ----------------
+
 async function loadRequests() {
 
-  const res = await fetch(`${API}/api/requests`);
-  const data = await res.json();
+  try {
 
-  const container = document.getElementById("requests-container");
-  container.innerHTML = "";
+    const res = await fetch(`${API}/api/requests`);
+    const data = await res.json();
 
-  data.forEach(r => {
+    const container = document.getElementById("requests-container");
+    container.innerHTML = "";
 
-    const card = document.createElement("div");
-    card.className = "item-card glass";
+    if (!data || data.length === 0) {
+      container.innerHTML = `
+        <div class="glass" style="padding:20px; text-align:center;">
+          <p>No requests yet</p>
+        </div>
+      `;
+      return;
+    }
 
-    card.innerHTML = `
-      <h3>${r.title}</h3>
-      <p>${r.description || ""}</p>
-      <p>Budget: ₹${r.budget || "N/A"}</p>
-      <p>By: ${r.requester.name}</p>
-      <button onclick="contact('${r.requester.name}','${r.requester.mobile}','${r.title}')">
-        Contact
-      </button>
-    `;
+    data.forEach(r => {
 
-    container.appendChild(card);
+      const name = r.requester?.name || "Unknown";
+      const mobile = r.requester?.mobile || "";
+      const desc = r.description || "";
 
-  });
+      const card = document.createElement("div");
+      card.className = "request-item glass";
+
+      card.innerHTML = `
+        <h3>${r.title}</h3>
+        <p>${desc}</p>
+        <p><strong>Budget:</strong> ₹${r.budget || "N/A"}</p>
+        <p><strong>Requested by:</strong> ${name}</p>
+
+        ${mobile ? `
+          <button onclick="contact('${name}','${mobile}','${r.title}')">
+            Contact
+          </button>
+        ` : `<p style="opacity:0.7;">Contact not available</p>`}
+      `;
+
+      container.appendChild(card);
+
+    });
+
+  } catch (error) {
+
+    console.error("Error loading requests:", error);
+
+  }
 
 }
 
 loadRequests();
 
 
+// ---------------- CREATE REQUEST ----------------
+
 async function createRequest() {
+
+  const button = document.querySelector(".request-form button");
 
   const token = localStorage.getItem("token");
 
-  const title = document.getElementById("r-title").value;
-  const desc = document.getElementById("r-desc").value;
-  const budget = document.getElementById("r-budget").value;
+  if (!token) {
+    alert("Please login first");
+    window.location.href = "index.html";
+    return;
+  }
 
-  const res = await fetch(`${API}/api/requests`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + token
-    },
-    body: JSON.stringify({
-      title,
-      description: desc,
-      budget
-    })
-  });
+  const title = document.getElementById("r-title").value.trim();
+  const desc = document.getElementById("r-desc").value.trim();
+  const budget = document.getElementById("r-budget").value.trim();
 
-  if (res.ok) {
-    alert("Request posted");
-    loadRequests();
-  } else {
-    alert("Error");
+  // ✅ Validation
+  if (!title) {
+    alert("Please enter what you need");
+    return;
+  }
+
+  // Disable button
+  button.disabled = true;
+  button.innerText = "Posting...";
+
+  try {
+
+    const res = await fetch(`${API}/api/requests`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({
+        title,
+        description: desc,
+        budget
+      })
+    });
+
+    if (res.ok) {
+
+      alert("Request posted successfully");
+
+      // Clear fields
+      document.getElementById("r-title").value = "";
+      document.getElementById("r-desc").value = "";
+      document.getElementById("r-budget").value = "";
+
+      loadRequests();
+
+    } else {
+
+      const err = await res.json();
+      alert(err.message || "Error posting request");
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+    alert("Server error");
+
+  } finally {
+
+    button.disabled = false;
+    button.innerText = "Post Request";
+
   }
 
 }
 
 
+// ---------------- CONTACT ----------------
+
 function contact(name, mobile, title) {
 
-  const msg = `Hi ${name}, I saw your request for "${title}".`;
+  const msg = `Hi ${name}, I saw your request for "${title}" on NIT KKR Marketplace.`;
 
   const link = `https://wa.me/91${mobile}?text=${encodeURIComponent(msg)}`;
 

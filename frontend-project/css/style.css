@@ -1335,12 +1335,63 @@ html {
 }
 
 /* request block */
-#requests-container {
-  display: grid;
-  gap: 16px;
+.request-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
 }
 
-#requests-container .item-card {
-  padding: 16px;
-  border-radius: 12px;
+.request-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.request-subtext {
+  color: #cbd5f5;
+  margin-bottom: 20px;
+}
+
+.request-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.request-form input,
+.request-form textarea {
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: white;
+}
+
+.request-form textarea {
+  height: 90px;
+}
+
+.request-form button {
+  padding: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #38bdf8, #6366f1);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.request-feed {
+  margin-top: 50px;
+}
+
+#requests-container {
+  display: grid;
+  gap: 20px;
+}
+
+.request-item {
+  padding: 20px;
+  border-radius: 15px;
 }
