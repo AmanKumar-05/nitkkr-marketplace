@@ -62,6 +62,22 @@
 
 const API = "https://nitkkr-marketplace-api.onrender.com";
 
+// ---------------- GET USER ID ----------------
+
+function getUserIdFromToken() {
+
+  const token = localStorage.getItem("token");
+  if (!token) return null;
+
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    return payload.id;
+  } catch {
+    return null;
+  }
+
+}
+
 // ---------------- LOAD REQUESTS ----------------
 
 async function loadRequests() {
@@ -83,6 +99,8 @@ async function loadRequests() {
       return;
     }
 
+    const currentUserId = getUserIdFromToken();
+
     data.forEach(r => {
 
       const name = r.requester?.name || "Unknown";
@@ -91,6 +109,7 @@ async function loadRequests() {
 
       const card = document.createElement("div");
       card.className = "request-item glass";
+      card.id = `req-${r._id}`; // 🔥 for instant removal
 
       card.innerHTML = `
         <h3>${r.title}</h3>
@@ -103,6 +122,13 @@ async function loadRequests() {
             Contact
           </button>
         ` : `<p style="opacity:0.7;">Contact not available</p>`}
+
+        ${r.requester?._id === currentUserId ? `
+          <button onclick="markFulfilled('${r._id}')" 
+            style="margin-top:10px; background:#22c55e;">
+            Mark as Fulfilled
+          </button>
+        ` : ""}
       `;
 
       container.appendChild(card);
@@ -125,7 +151,6 @@ loadRequests();
 async function createRequest() {
 
   const button = document.querySelector(".request-form button");
-
   const token = localStorage.getItem("token");
 
   if (!token) {
@@ -138,13 +163,11 @@ async function createRequest() {
   const desc = document.getElementById("r-desc").value.trim();
   const budget = document.getElementById("r-budget").value.trim();
 
-  // ✅ Validation
   if (!title) {
     alert("Please enter what you need");
     return;
   }
 
-  // Disable button
   button.disabled = true;
   button.innerText = "Posting...";
 
@@ -167,7 +190,6 @@ async function createRequest() {
 
       alert("Request posted successfully");
 
-      // Clear fields
       document.getElementById("r-title").value = "";
       document.getElementById("r-desc").value = "";
       document.getElementById("r-budget").value = "";
@@ -190,6 +212,45 @@ async function createRequest() {
 
     button.disabled = false;
     button.innerText = "Post Request";
+
+  }
+
+}
+
+
+// ---------------- MARK AS FULFILLED ----------------
+
+async function markFulfilled(id) {
+
+  const token = localStorage.getItem("token");
+
+  if (!confirm("Mark this request as fulfilled?")) return;
+
+  try {
+
+    const res = await fetch(`${API}/api/requests/${id}/fulfilled`, {
+      method: "PATCH",
+      headers: {
+        "Authorization": "Bearer " + token
+      }
+    });
+
+    if (res.ok) {
+
+      // 🔥 REMOVE FROM UI INSTANTLY
+      const card = document.getElementById(`req-${id}`);
+      if (card) card.remove();
+
+    } else {
+
+      alert("Error updating request");
+
+    }
+
+  } catch (err) {
+
+    console.error(err);
+    alert("Server error");
 
   }
 

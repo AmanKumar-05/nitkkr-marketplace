@@ -6,9 +6,13 @@ const jwt = require("jsonwebtoken");
 // 🔐 AUTH MIDDLEWARE
 function auth(req, res, next) {
 
-  const token = req.headers.authorization?.split(" ")[1];
+  const authHeader = req.headers.authorization;
 
-  if (!token) return res.status(401).json({ message: "No token" });
+  if (!authHeader) {
+    return res.status(401).json({ message: "No token" });
+  }
+
+  const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -24,39 +28,72 @@ function auth(req, res, next) {
 // ➕ CREATE REQUEST
 router.post("/", auth, async (req, res) => {
 
-  const { title, description, budget } = req.body;
+  try {
 
-  const request = new Request({
-    title,
-    description,
-    budget,
-    requester: req.userId
-  });
+    const { title, description, budget } = req.body;
 
-  await request.save();
+    // ✅ Validation
+    if (!title) {
+      return res.status(400).json({ message: "Title is required" });
+    }
 
-  res.json(request);
+    const request = new Request({
+      title,
+      description,
+      budget,
+      requester: req.userId,
+      status: "open" // 🔥 ensure default
+    });
+
+    await request.save();
+
+    res.json(request);
+
+  } catch (err) {
+
+    console.error("Create request error:", err);
+    res.status(500).json({ message: "Server error" });
+
+  }
 
 });
 
 
-// 📦 GET ALL REQUESTS
+// 📦 GET ALL REQUESTS (ONLY OPEN)
 router.get("/", async (req, res) => {
 
-  const requests = await Request.find({ status: "open" })
-    .populate("requester", "name email mobile");
+  try {
 
-  res.json(requests);
+    const requests = await Request.find({ status: "open" })
+      .populate("requester", "name mobile");
+
+    res.json(requests);
+
+  } catch (err) {
+
+    console.error("Fetch requests error:", err);
+    res.status(500).json({ message: "Server error" });
+
+  }
 
 });
 
 
-// 📋 MY REQUESTS
+// 📋 MY REQUESTS (OPTIONAL: include all statuses)
 router.get("/mine", auth, async (req, res) => {
 
-  const requests = await Request.find({ requester: req.userId });
+  try {
 
-  res.json(requests);
+    const requests = await Request.find({ requester: req.userId });
+
+    res.json(requests);
+
+  } catch (err) {
+
+    console.error("Fetch my requests error:", err);
+    res.status(500).json({ message: "Server error" });
+
+  }
 
 });
 
@@ -64,18 +101,29 @@ router.get("/mine", auth, async (req, res) => {
 // ✅ MARK FULFILLED
 router.patch("/:id/fulfilled", auth, async (req, res) => {
 
-  const reqItem = await Request.findById(req.params.id);
+  try {
 
-  if (!reqItem) return res.status(404).json({ message: "Not found" });
+    const reqItem = await Request.findById(req.params.id);
 
-  if (reqItem.requester.toString() !== req.userId) {
-    return res.status(403).json({ message: "Not allowed" });
+    if (!reqItem) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    if (reqItem.requester.toString() !== req.userId) {
+      return res.status(403).json({ message: "Not allowed" });
+    }
+
+    reqItem.status = "fulfilled";
+    await reqItem.save();
+
+    res.json({ message: "Marked fulfilled" });
+
+  } catch (err) {
+
+    console.error("Fulfill request error:", err);
+    res.status(500).json({ message: "Server error" });
+
   }
-
-  reqItem.status = "fulfilled";
-  await reqItem.save();
-
-  res.json({ message: "Marked fulfilled" });
 
 });
 
