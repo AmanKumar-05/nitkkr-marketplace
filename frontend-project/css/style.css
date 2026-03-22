@@ -1329,3 +1329,14 @@ html {
   color: white;
   cursor: pointer;
 }
+
+/* request block */
+#requests-container {
+  display: grid;
+  gap: 16px;
+}
+
+#requests-container .item-card {
+  padding: 16px;
+  border-radius: 12px;
+}

@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const itemRoutes = require("./routes/items");
+const requestRoutes = require("./routes/requests");
 
 require("./jobs/cleanup");
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/items", itemRoutes);
+app.use("/api/requests", requestRoutes);
 
 // Test route
 app.get("/", (req, res) => {

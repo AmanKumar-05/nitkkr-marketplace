@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Requests | NIT KKR Marketplace</title>
+<link rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<div class="container">
+
+<nav class="navbar glass">
+  <a href="dashboard.html" class="nav-btn">Dashboard</a>
+</nav>
+
+<section class="welcome">
+  <h1>Request Board</h1>
+  <p>Post what you need or help others.</p>
+</section>
+
+<section class="glass" style="padding:20px; margin-bottom:20px;">
+
+<h3>Post a Request</h3>
+
+<input id="r-title" placeholder="What do you need?" />
+<input id="r-budget" placeholder="Budget (optional)" />
+<textarea id="r-desc" placeholder="Description"></textarea>
+
+<button onclick="createRequest()">Post Request</button>
+
+</section>
+
+<section id="requests-container"></section>
+
+</div>
+
+<script>
+
+const API = "https://nitkkr-marketplace-api.onrender.com";
+
+async function loadRequests() {
+
+  const res = await fetch(`${API}/api/requests`);
+  const data = await res.json();
+
+  const container = document.getElementById("requests-container");
+  container.innerHTML = "";
+
+  data.forEach(r => {
+
+    const card = document.createElement("div");
+    card.className = "item-card glass";
+
+    card.innerHTML = `
+      <h3>${r.title}</h3>
+      <p>${r.description || ""}</p>
+      <p>Budget: ₹${r.budget || "N/A"}</p>
+      <p>By: ${r.requester.name}</p>
+      <button onclick="contact('${r.requester.name}','${r.requester.mobile}','${r.title}')">
+        Contact
+      </button>
+    `;
+
+    container.appendChild(card);
+
+  });
+
+}
+
+loadRequests();
+
+
+async function createRequest() {
+
+  const token = localStorage.getItem("token");
+
+  const title = document.getElementById("r-title").value;
+  const desc = document.getElementById("r-desc").value;
+  const budget = document.getElementById("r-budget").value;
+
+  const res = await fetch(`${API}/api/requests`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + token
+    },
+    body: JSON.stringify({
+      title,
+      description: desc,
+      budget
+    })
+  });
+
+  if (res.ok) {
+    alert("Request posted");
+    loadRequests();
+  } else {
+    alert("Error");
+  }
+
+}
+
+
+function contact(name, mobile, title) {
+
+  const msg = `Hi ${name}, I saw your request for "${title}".`;
+
+  const link = `https://wa.me/91${mobile}?text=${encodeURIComponent(msg)}`;
+
+  window.open(link, "_blank");
+
+}
+
+</script>
+
+</body>
+</html>
