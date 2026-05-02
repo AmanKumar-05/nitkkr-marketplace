@@ -113,29 +113,17 @@ Instead of wasting products or using random groups, this website creates a struc
 
 ## 📸 Screenshots
 
-### 🏠 Home Page
+### 🏠 Index Page
 
 ![Index Page](screenshots/index.jpeg)
 
-### 🔐 Login Page
+### 🔐 Dashboard Page
 
 ![Dashboard Page](screenshots/dashboard.jpeg)
-
-### 🛒 Sell Product Page
-
-![Sell Page](screenshots/sell.jpeg)
-
-### 📊 Dashboard
-
-![Buy Page](screenshots/buy.jpeg)
 
 ### 👤 Profile
 
 ![Profile](screenshots/profile2.jpeg)
-
-### 📦 My Listings
-
-![Listings](screenshots/listings.jpeg)
 
 ## ⚙️ Run Locally
 
