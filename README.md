@@ -234,6 +234,10 @@ root/
 ├── .DS_Store
 └── README.md
 ```
+## 🔐 Environment Variables
+
+Create a `.env` file inside `backend/` using `.env.example` as reference.
+
 ---
 ## 👨‍💻 Developer
 
